@@ -4,6 +4,7 @@
 
 <head>
     <title>@yield('title')</title>
+    <link rel="icon" href="{{ asset('img/ae-icon.svg') }}" type="image/svg+xml">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
@@ -24,8 +25,10 @@
 
 <body>
     <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">AE</a>
+        <div class="container">
+            <a class="navbar-brand" href="{{ route('home') }}">
+                <img src="{{ asset('img/ae-icon.svg') }}" alt="Atelier Europeo" height="40">
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -37,14 +40,15 @@
                         <a class="nav-link @yield('active_home')" aria-current="page" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle @yield('active_viaggiare')" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                        <a class="nav-link dropdown-toggle @yield('active_viaggiare')" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                             Viaggiare all'Estero
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ route('project.index') }}">ESC</a></li>
                             <li><a class="dropdown-item" href="{{ route('project.index') }}">Scambi Giovanili</a></li>
-                            <li><a class="dropdown-item" href="{{ route('project.index') }}">Corsi di Formazione</a></li>
+                            <li><a class="dropdown-item" href="{{ route('project.index') }}">Corsi di Formazione</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
