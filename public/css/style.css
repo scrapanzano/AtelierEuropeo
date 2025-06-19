@@ -1,0 +1,20 @@
+.section-title {
+    font-weight: 600;
+    font-size: 6rem;
+}
+
+.section-subtitle {
+    font-weight: 400;
+    font-size: 1.5rem;
+    opacity: 0.75;
+}
+
+.main-text {
+    font-weight: 300;
+    font-size: 1.5rem;
+}
+
+.btn-rounded {
+    border-radius: 20px;
+}
+

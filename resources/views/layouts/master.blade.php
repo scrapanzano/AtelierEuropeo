@@ -39,30 +39,31 @@
                     <li class="nav-item">
                         <a class="nav-link @yield('active_home')" aria-current="page" href="{{ route('home') }}">Home</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="#">Chi siamo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('active_portfolio')" aria-current="page" href="#">Portolio progetti</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @yield('active_viaggiare')" href="#" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Viaggiare all'Estero
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('project.index') }}">ESC</a></li>
+                            <li><a class="dropdown-item" href="{{ route('project.index') }}">Corpo Europeo di Solidarietà</a></li>
                             <li><a class="dropdown-item" href="{{ route('project.index') }}">Scambi Giovanili</a></li>
                             <li><a class="dropdown-item" href="{{ route('project.index') }}">Corsi di Formazione</a>
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('active_contatti')" aria-current="page" href="#">Contatti</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
-
-    <div class="container-fluid">
-        <header class="header-sezione">
-            <h1>
-                @yield('title')
-            </h1>
-        </header>
-    </div>
 
     @yield('body')
 </body>
