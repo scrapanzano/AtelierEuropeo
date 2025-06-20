@@ -25,6 +25,9 @@ use Illuminate\Support\Facades\Route;
 // Home
 Route::get('/', [FrontController::class, 'getHome'])->name('home');
 
+// About
+Route::get('/about', [FrontController::class, 'getAbout'])->name('about');
+
 // Progetti
 Route::resource('project', ProjectController::class);
 Route::get('/project/{id}/destroy/confirm', [ProjectController::class, 'confirmDestroy'])->name('project.destroy.confirm');

@@ -9,7 +9,7 @@
     <section style="background-color: #1a2442">
         <div class="container py-5 text-center">
             <h1 class="section-title text-warning">Atelier Europeo</h1>
-            <h1 class="section-subtitle text-white">Opportunità per crescere, viaggiare e imparare.</h1>
+            <h1 class="section-subtitle text-white" style="opacity: 1;">Opportunità per crescere, viaggiare e imparare.</h1>
         </div>
     </section>
 
@@ -27,21 +27,25 @@
                 <div class="card border-0 shadow-sm me-3">
                     <div class="card-body">
                         <h2 class="card-title text-primary fw-bold">10+</h2>
-                        <p class="card-text opacity-75">anni di esperienza</p>
+                        <p class="lead card-text">anni di esperienza</p>
                     </div>
                 </div>
                 <div class="card border-0 shadow-sm me-3">
                     <div class="card-body">
                         <h2 class="card-title text-primary fw-bold">200+</h2>
-                        <p class="card-text opacity-75">progetti realizzati</p>
+                        <p class="lead card-text">progetti realizzati</p>
                     </div>
                 </div>
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <h2 class="card-title text-primary fw-bold">100+</h2>
-                        <p class="card-text opacity-75">partner in tutta Europa</p>
+                        <p class="lead card-text">partner in tutta Europa</p>
                     </div>
                 </div>
+            </div>
+
+            <div class="container py-5">
+                <a href="{{ route('about') }}" class="btn btn-lg btn-primary btn-rounded">Scopri chi siamo</a>
             </div>
         </div>
     </section>

@@ -40,10 +40,10 @@
                         <a class="nav-link @yield('active_home')" aria-current="page" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="#">Chi siamo</a>
+                        <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="{{ route('about') }}">Chi siamo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @yield('active_portfolio')" aria-current="page" href="#">Portolio progetti</a>
+                        <a class="nav-link @yield('active_progetti')" aria-current="page" href="{{ route('project.index') }}">Progetti disponibili</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @yield('active_viaggiare')" href="#" role="button"
@@ -51,9 +51,9 @@
                             Viaggiare all'Estero
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('project.index') }}">Corpo Europeo di Solidarietà</a></li>
-                            <li><a class="dropdown-item" href="{{ route('project.index') }}">Scambi Giovanili</a></li>
-                            <li><a class="dropdown-item" href="{{ route('project.index') }}">Corsi di Formazione</a>
+                            <li><a class="dropdown-item" href="#">Corpo Europeo di Solidarietà</a></li>
+                            <li><a class="dropdown-item" href="#">Scambi Giovanili</a></li>
+                            <li><a class="dropdown-item" href="#">Corsi di Formazione</a>
                             </li>
                         </ul>
                     </li>
