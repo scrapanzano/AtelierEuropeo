@@ -40,10 +40,12 @@
                         <a class="nav-link @yield('active_home')" aria-current="page" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="{{ route('about') }}">Chi siamo</a>
+                        <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="{{ route('about') }}">Chi
+                            siamo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @yield('active_progetti')" aria-current="page" href="{{ route('project.index') }}">Progetti disponibili</a>
+                        <a class="nav-link @yield('active_progetti')" aria-current="page"
+                            href="{{ route('project.index') }}">Progetti disponibili</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @yield('active_viaggiare')" href="#" role="button"
@@ -64,6 +66,14 @@
             </div>
         </div>
     </nav>
+
+    <div class="container d-flex justify-content-start pt-4">
+        <nav aria-label="breadcrumb" class="w-100">
+            <ol class="breadcrumb bg-light bg-opacity-75 p-3 rounded-3 mb-4 align-items-center">
+                @yield('breadcrumb')
+            </ol>
+        </nav>
+    </div>
 
     @yield('body')
 </body>

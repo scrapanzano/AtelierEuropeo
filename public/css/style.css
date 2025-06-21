@@ -18,6 +18,7 @@
     border-radius: 20px !important;
 }
 
+
 .badge-project {
     position: absolute;
     top: 0;
@@ -32,3 +33,62 @@
     font-weight: 500 !important;
 }
 
+.badge-favourite {
+    position: absolute;
+    top: 0px;
+    right: 10px;  
+    z-index: 1;
+    color: #fff;  
+    font-size: 1.3rem;  
+}
+
+.card-img-bright {
+    filter: brightness(1.1);
+}
+
+.card-img-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 40%);
+    pointer-events: none;
+}
+
+.badge-bottom-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 0.5rem;
+    background: rgba(33, 37, 41, 0.75); 
+    border-radius: 0.5rem;
+    font-weight: 500;
+    z-index: 2;
+}
+
+
+.hero-section {
+    position: relative;
+    min-height: 320px;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 30, 50, 0.45);
+    z-index: 1;
+}
+
+.hero-section .container {
+    z-index: 2;
+    position: relative;
+}

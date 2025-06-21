@@ -10,9 +10,27 @@ class DataLayer
     public function listProjects () {
         $projectsList = array();
 
-        $projectsList[] = new Project(1, "Volontariato in Finlandia", "ESC", "Chiara Usanza", 1);
-        $projectsList[] = new Project(2, "My Voice", "Scambi Giovanili", "Davide Leone", 2);
-        $projectsList[] = new Project(3, "Study Visit", "Corsi di Formazione", "Davide Leone", 2);
+        $projectsList[] = new Project(1, "Volontariato in Finlandia", "ESC", "Chiara Usanza", 1, 
+            2, "Finlandia", "2024-06-01", "2024-07-01", "2024-05-01",
+            "Associazione Volontari Finlandesi", 
+            "Un'esperienza di volontariato in Finlandia per giovani tra i 18 e i 30 anni.",
+            "Il progetto prevede attività di volontariato in diverse aree, come la tutela dell'ambiente e l'assistenza sociale.",
+            "Essere tra i 18 e i 30 anni, avere una buona conoscenza dell'inglese.",
+            "I costi di viaggio saranno coperti dall'associazione, e sarà fornito un alloggio gratuito durante il soggiorno.");
+        $projectsList[] = new Project(2, "My Voice", "YTH", "Davide Leone", 2, 
+            5, "Italia", "2024-08-01", "2024-08-15", "2024-07-01",
+            "Associazione Giovani Italiani", 
+            "Un progetto di scambio giovanile per promuovere la partecipazione attiva dei giovani.",
+            "Il progetto include attività culturali, workshop e discussioni su temi sociali.",
+            "Essere tra i 18 e i 30 anni, avere interesse per le questioni sociali e culturali.",
+            "I costi di viaggio saranno coperti dall'associazione, e sarà fornito un alloggio condiviso durante il soggiorno.");
+        $projectsList[] = new Project(3, "Study Visit", "TRG", "Davide Leone", 2, 
+            10, "Spagna", "2024-09-01", "2024-09-10", "2024-08-01",
+            "Associazione Formazione Europea", 
+            "Un corso di formazione per migliorare le competenze professionali dei partecipanti.",
+            "Il corso include sessioni teoriche e pratiche su vari argomenti professionali.",
+            "Essere tra i 18 e i 35 anni, avere un interesse per lo sviluppo professionale.",
+            "I costi di viaggio saranno coperti dall'associazione, e sarà fornito un alloggio in hotel durante il soggiorno.");
 
         return $projectsList;
     }
@@ -48,11 +66,29 @@ class DataLayer
      */
     public function findProjectByID($id) {
         if($id==1) {
-            return new Project(1, "Volontariato in Finlandia", "ESC", "Chiara Usanza", 1);
+            return new Project(1, "Volontariato in Finlandia", "ESC", "Chiara Usanza", 1, 
+                2, "Finlandia", "2024-06-01", "2024-07-01", "2024-05-01",
+                "Associazione Volontari Finlandesi", 
+                "Un'esperienza di volontariato in Finlandia per giovani tra i 18 e i 30 anni.",
+                "Il progetto prevede attività di volontariato in diverse aree, come la tutela dell'ambiente e l'assistenza sociale.",
+                "Essere tra i 18 e i 30 anni, avere una buona conoscenza dell'inglese.",
+                "I costi di viaggio saranno coperti dall'associazione, e sarà fornito un alloggio gratuito durante il soggiorno.");
         } elseif($id==2) {
-            return new Project(2, "My Voice", "Scambi Giovanili", "Davide Leone", 2);
+            return new Project(2, "My Voice", "YTH", "Davide Leone", 2, 
+                5, "Italia", "2024-08-01", "2024-08-15", "2024-07-01",
+                "Associazione Giovani Italiani", 
+                "Un progetto di scambio giovanile per promuovere la partecipazione attiva dei giovani.",
+                "Il progetto include attività culturali, workshop e discussioni su temi sociali.",
+                "Essere tra i 18 e i 30 anni, avere interesse per le questioni sociali e culturali.",
+                "I costi di viaggio saranno coperti dall'associazione, e sarà fornito un alloggio condiviso durante il soggiorno.");
         } elseif($id==3) {
-            return new Project(3, "Study Visit", "Corsi di Formazione", "Davide Leone", 2);
+            return new Project(3, "Study Visit", "TRG", "Davide Leone", 2, 
+                10, "Spagna", "2024-09-01", "2024-09-10", "2024-08-01",
+                "Associazione Formazione Europea", 
+                "Un corso di formazione per migliorare le competenze professionali dei partecipanti.",
+                "Il corso include sessioni teoriche e pratiche su vari argomenti professionali.",
+                "Essere tra i 18 e i 35 anni, avere un interesse per lo sviluppo professionale.",
+                "I costi di viaggio saranno coperti dall'associazione, e sarà fornito un alloggio in hotel durante il soggiorno.");
         } else {
             return null;
         }
