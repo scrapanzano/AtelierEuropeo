@@ -42,7 +42,14 @@ class ProjectController extends Controller
      */
     public function show(string $id)
     {
-        abort(501);
+        $dl = new DataLayer();
+        $project = $dl->findProjectByID($id);
+
+        if($project != null) {
+            return view('project.details')->with('project', $project);
+        } else {
+            return view('errors.wrongID')->with('message', 'Wrong project ID has been used!');
+        }
     }
 
     /**
@@ -57,7 +64,7 @@ class ProjectController extends Controller
         if($project != null) {
             return view('project.editProject')->with('creatorsList', $creatorsList)->with('project', $project);
         } else {
-            return view('errors.wrongID')->with('message', "L'ID utilizzato è scorretto!");
+            return view('errors.wrongID')->with('message', "Wrong project ID has been used!");
         }
     }
 
@@ -76,7 +83,7 @@ class ProjectController extends Controller
         if($project != null) {
             return view('project.deleteProject')->with('project', $project);
         } else {
-            return view('errors.wrongID')->with('message', "L'ID utilizzato è scorretto!");
+            return view('errors.wrongID')->with('message', "Wrong project ID has been used!");
         }
     }
 
