@@ -67,13 +67,7 @@
         </div>
     </nav>
 
-    <div class="container d-flex justify-content-start pt-4">
-        <nav aria-label="breadcrumb" class="w-100">
-            <ol class="breadcrumb bg-light bg-opacity-75 p-3 rounded-3 mb-4 align-items-center">
-                @yield('breadcrumb')
-            </ol>
-        </nav>
-    </div>
+    @yield('breadcrumb')
 
     @yield('body')
 </body>

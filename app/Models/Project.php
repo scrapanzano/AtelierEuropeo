@@ -15,13 +15,14 @@ class Project
     private $endDate;
     private $expireDate;
     private $associationName;
+    private $associationDescription;
     private $sumDescription;
     private $fullDescription;
     private $requirements;
     private $travelConditions;
 
 
-    public function __construct($id, $title, $category, $creator, $creatorID, $requestedPeople, $place, $startDate, $endDate, $expireDate, $associationName, $sumDescription, $fullDescription, $requirements, $travelConditions)
+    public function __construct($id, $title, $category, $creator, $creatorID, $requestedPeople, $place, $startDate, $endDate, $expireDate, $associationName, $associationDescription, $sumDescription, $fullDescription, $requirements, $travelConditions)
     {
         $this->id = $id;
         $this->title = $title;
@@ -34,6 +35,7 @@ class Project
         $this->endDate = $endDate;
         $this->expireDate = $expireDate;
         $this->associationName = $associationName;
+        $this->associationDescription = $associationDescription;
         $this->sumDescription = $sumDescription;
         $this->fullDescription = $fullDescription;
         $this->requirements = $requirements;
@@ -84,6 +86,10 @@ class Project
 
     function getAssociationName() {
         return $this->associationName;
+    }
+
+    function getAssociationDescription() {
+        return $this->associationDescription;
     }
 
     function getSumDescription() {
@@ -146,6 +152,10 @@ class Project
 
     function setAssociationName($associationName) {
         $this->associationName = $associationName;
+    }
+
+    function setAssociationDescription($associationDescription) {
+        $this->associationDescription = $associationDescription;
     }
 
     function setSumDescription($sumDescription) {
