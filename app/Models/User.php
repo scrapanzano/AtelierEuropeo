@@ -45,4 +45,32 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Relazione per i progetti salvati dall'utente.
+     */
+    public function savedProjects()
+    {
+        return $this->belongsToMany(Project::class, 'project_user')
+                    ->withPivot('is_favorite')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Relazione diretta alle applicazioni fatte dall'utente.
+     */
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'user_id');
+    }
+
+    /**
+     * Relazione per i progetti a cui l'utente ha fatto domanda.
+     */
+    public function appliedProjects()
+    {
+        return $this->belongsToMany(Project::class, 'applications', 'user_id', 'project_id')
+                    ->withPivot('status', 'message', 'application_date')
+                    ->withTimestamps();
+    }
 }

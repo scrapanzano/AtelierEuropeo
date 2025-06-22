@@ -2,176 +2,55 @@
 
 namespace App\Models;
 
-class Project
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Project extends Model
 {
-    private $id;
-    private $title;
-    private $category;
-    private $creator;
-    private $creatorID;
-    private $requestedPeople;
-    private $place;
-    private $startDate;
-    private $endDate;
-    private $expireDate;
-    private $associationName;
-    private $associationDescription;
-    private $sumDescription;
-    private $fullDescription;
-    private $requirements;
-    private $travelConditions;
+    use HasFactory;
+    protected $table = 'project';
 
+    protected $fillable = [
+        'title', 
+        'author_id',
+        'category_id',
+        'association_id',
+        'requested_people',
+        'location',
+        'start_date',
+        'end_date',
+        'expire_date', 
+        'sum_description',
+        'full_description',
+        'requirements',
+        'travel_conditions'];
 
-    public function __construct($id, $title, $category, $creator, $creatorID, $requestedPeople, $place, $startDate, $endDate, $expireDate, $associationName, $associationDescription, $sumDescription, $fullDescription, $requirements, $travelConditions)
-    {
-        $this->id = $id;
-        $this->title = $title;
-        $this->category = $category;
-        $this->creator = $creator;
-        $this->creatorID = $creatorID;
-        $this->requestedPeople = $requestedPeople;
-        $this->place = $place;
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
-        $this->expireDate = $expireDate;
-        $this->associationName = $associationName;
-        $this->associationDescription = $associationDescription;
-        $this->sumDescription = $sumDescription;
-        $this->fullDescription = $fullDescription;
-        $this->requirements = $requirements;
-        $this->travelConditions = $travelConditions;
+    
+    public function author() {
+        return $this->belongsTo(Author::class, 'author_id');
     }
 
-    // Getters
+    public function category() {
+        return $this->belongsTo(Category::class, 'category_id');
+    } 
 
-    function getID() {
-        return $this->id;
+    public function association() {
+        return $this->belongsTo(Association::class, 'association_id');
     }
 
-    function getTitle() {
-        return $this->title;
+    public function applications() {
+        return $this->hasMany(Application::class, 'project_id');
     }
 
-    function getCategory() {
-        return $this->category;
+    public function savedUsers() {
+        return $this->belongsToMany(User::class, 'project_user')
+                    ->wherePivot('is_favorite', true)
+                    ->withTimestamps();
     }
 
-    function getCreator() {
-        return $this->creator;
-    }
-
-    function getCreatorID(){
-        return $this->creatorID;
-    }
-
-    function getRequestedPeople() {
-        return $this->requestedPeople;
-    }
-
-    function getPlace() {
-        return $this->place;
-    }
-
-    function getStartDate() {
-        return $this->startDate;
-    }
-
-    function getEndDate() {
-        return $this->endDate;
-    }
-
-    function getExpireDate() {
-        return $this->expireDate;
-    }
-
-    function getAssociationName() {
-        return $this->associationName;
-    }
-
-    function getAssociationDescription() {
-        return $this->associationDescription;
-    }
-
-    function getSumDescription() {
-        return $this->sumDescription;
-    }
-
-    function getFullDescription() {
-        return $this->fullDescription;
-    }
-
-    function getRequirements() {
-        return $this->requirements;
-    }
-
-    function getTravelConditions() {
-        return $this->travelConditions;
-    }
-
-    // Setters
-
-    function setID($id) {
-        $this->id = $id;
-    }
-
-    function setTitle($title) {
-        $this->id = $title;
-    }
-
-    function setCategory($category) {
-        $this->category = $category;
-    }
-
-    function setCreator($creator) {
-        $this->creator = $creator;
-    }
-
-    function setCreatorID($creatorID) {
-        $this->creatorID = $creatorID;
-    }
-
-    function setRequestedPeople($requestedPeople) {
-        $this->requestedPeople = $requestedPeople;
-    }
-
-    function setPlace($place) {
-        $this->place = $place;
-    }
-
-    function setStartDate($startDate) {
-        $this->startDate = $startDate;
-    }
-
-    function setEndDate($endDate) {
-        $this->endDate = $endDate;
-    }
-
-    function setExpireDate($expireDate) {
-        $this->expireDate = $expireDate;
-    }
-
-    function setAssociationName($associationName) {
-        $this->associationName = $associationName;
-    }
-
-    function setAssociationDescription($associationDescription) {
-        $this->associationDescription = $associationDescription;
-    }
-
-    function setSumDescription($sumDescription) {
-        $this->sumDescription = $sumDescription;
-    }
-
-    function setFullDescription($fullDescription) {
-        $this->fullDescription = $fullDescription;
-    }
-
-    function setRequirements($requirements) {
-        $this->requirements = $requirements;
-    }
-
-    function setTravelConditions($travelConditions) {
-        $this->travelConditions = $travelConditions;
-    }
+    public function appliedUsers() {
+        return $this->belongsToMany(User::class, 'applications', 'project_id', 'user_id')
+                    ->withPivot('status', 'message', 'application_date')
+                    ->withTimestamps();
+    } 
 }
-
