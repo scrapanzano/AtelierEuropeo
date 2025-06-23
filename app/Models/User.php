@@ -12,6 +12,10 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    public const ROLE_USER = 'user';
+    public const ROLE_PROJECT_ADMIN = 'project_admin';
+    public const ROLE_SUPER_ADMIN = 'super_admin';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -46,31 +51,41 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Relazione per i progetti salvati dall'utente.
-     */
-    public function savedProjects()
+    public function projects()
     {
-        return $this->belongsToMany(Project::class, 'project_user')
-                    ->withPivot('is_favorite')
-                    ->withTimestamps();
+        return $this->hasMany(Project::class, 'user_id');
     }
 
     /**
-     * Relazione diretta alle applicazioni fatte dall'utente.
+     * Controlla se l'utente è un utente normale
      */
-    public function applications()
+    public function isUser(): bool
     {
-        return $this->hasMany(Application::class, 'user_id');
+        return $this->role === self::ROLE_USER;
     }
 
     /**
-     * Relazione per i progetti a cui l'utente ha fatto domanda.
+     * Controlla se l'utente è un amministratore di progetto
      */
-    public function appliedProjects()
+    public function isProjectAdmin(): bool
     {
-        return $this->belongsToMany(Project::class, 'applications', 'user_id', 'project_id')
-                    ->withPivot('status', 'message', 'application_date')
-                    ->withTimestamps();
+        return $this->role === self::ROLE_PROJECT_ADMIN;
+    }
+
+    /**
+     * Controlla se l'utente è un super amministratore
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === self::ROLE_SUPER_ADMIN;
+    }
+
+    /**
+     * Controlla se l'utente può gestire un progetto specifico
+     */
+    public function canManageProject($project): bool
+    {
+        return $this->isSuperAdmin() ||
+            ($this->isProjectAdmin() && $project->user_id === $this->id);
     }
 }

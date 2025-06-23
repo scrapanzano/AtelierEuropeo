@@ -2,24 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 class Category extends Model
 {
-    use \Illuminate\Database\Eloquent\Factories\HasFactory;
+    /** @use HasFactory<\Database\Factories\CategoryFactory> */
+    use HasFactory;
 
-    protected $table = 'category';
+    protected $table = 'categories';
 
     protected $fillable = [
-        'name',
-        'code',
+        'tag',
         'description',
     ];
 
-    /**
-     * Relazione con i progetti.
-     */
     public function projects()
     {
         return $this->hasMany(Project::class, 'category_id');
