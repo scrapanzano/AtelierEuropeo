@@ -17,7 +17,7 @@
             <div class="col-md-12">
                 @if (isset($project))
                     <form class="form-horizontal" name="project" method="post"
-                        action="{{ route('project.update', ['project' => $project->getId()]) }}">
+                        action="{{ route('project.update', ['project' => $project->id]) }}">
                         <!--<input type="hidden" name="_method" value="PUT">-->
                         @method('PUT')
                     @else
@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-10">
                         @if (isset($project))
-                            <input class="form-control" type="text" name="title" value="{{ $project->getTitle() }}" />
+                            <input class="form-control" type="text" name="title" value="{{ $project->title }}" />
                         @else
                             <input class="form-control" type="text" name="title" />
                         @endif
@@ -43,11 +43,11 @@
                     <div class="col-md-10">
                         <select class="form-control" name="creatorID">
                             @foreach ($creatorsList as $creator)
-                                @if (isset($project) && $creator->getId() == $project->getCreatorID())
-                                    <option value="{{ $creator->getId() }}" selected="selected">{{ $creator->getLastName() }}
+                                @if (isset($project) && $creator->id == $project->creator_id)
+                                    <option value="{{ $creator->id }}" selected="selected">{{ $creator->last_name }}
                                     </option>
                                 @else
-                                    <option value="{{ $creator->getId() }}">{{ $creator->getLastName() }}</option>
+                                    <option value="{{ $creator->id }}">{{ $creator->last_name }}</option>
                                 @endif
                             @endforeach
                         </select>

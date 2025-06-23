@@ -28,17 +28,17 @@
             @foreach ($projectsList as $project)
                 <div class="col-12 col-sm-6 col-lg-4 mb-4 d-flex">
                     <div class="card border-0 shadow-sm rounded-4 position-relative h-100 d-flex flex-column w-100">
-                        <a href="{{ route('project.show', ['project' => $project->getID()]) }}" class="stretched-link"></a>
+                        <a href="{{ route('project.show', ['project' => $project->id]) }}" class="stretched-link"></a>
                         @php
                             $categoryColors = [
                                 'ESC' => 'text-bg-success',
                                 'YTH' => 'text-bg-primary',
                                 'TRG' => 'text-bg-warning',
                             ];
-                            $category = $project->getCategory();
-                            $badgeColor = $categoryColors[$category];
+                            $category = $project->category;
+                            $badgeColor = $categoryColors[$category->tag];
                         @endphp
-                        <span class="badge badge-project {{ $badgeColor }} fw-bold">{{ $category }}</span>
+                        <span class="badge badge-project {{ $badgeColor }} fw-bold">{{ $category->tag }}</span>
                         <i class="bi bi-heart badge-favourite text-white"></i>
                         <div class="position-relative">
                             <img src="{{ asset('img/progetti/elf-start.png') }}"
@@ -50,7 +50,7 @@
                         </div>
                         <div class="card-body d-flex flex-column flex-grow-1">
                             <div class="d-flex justify-content-between align-items-center">
-                                <h4 class="card-title mb-0">{{ $project->getTitle() }}</h4>
+                                <h4 class="card-title mb-0">{{ $project->title }}</h4>
                                 <div class="dropdown">
                                     <button class="btn p-0 position-relative" style="z-index: 2;" type="button"
                                         data-bs-toggle="dropdown" aria-expanded="false" title="Opzioni">
@@ -68,7 +68,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <p class="card-text pt-2">{{ $project->getSumDescription() }}
+                            <p class="card-text pt-2">{{ $project->sum_description }}
                             </p>
                         </div>
                     </div>
