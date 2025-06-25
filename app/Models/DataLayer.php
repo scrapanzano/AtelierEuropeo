@@ -5,8 +5,17 @@ namespace App\Models;
 class DataLayer {
 
     public function listProjects() {
-        $projectsList = Project::orderBy('created_at', 'desc')->get();
+        $projectsList = Project::orderBy('title', 'asc')->get();
         return $projectsList;
+    }
+
+    public function getFeaturedProjects($limit = 6)
+    {
+        // Recupera progetti pubblicati in ordine casuale
+        return Project::where('status', 'published')
+                    ->inRandomOrder()
+                    ->limit($limit)
+                    ->get();
     }
 
     public function findAuthorById($id) {

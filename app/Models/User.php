@@ -14,7 +14,6 @@ class User extends Authenticatable
 
     public const ROLE_USER = 'user';
     public const ROLE_PROJECT_ADMIN = 'project_admin';
-    public const ROLE_SUPER_ADMIN = 'super_admin';
 
     /**
      * The attributes that are mass assignable.
@@ -72,20 +71,13 @@ class User extends Authenticatable
         return $this->role === self::ROLE_PROJECT_ADMIN;
     }
 
-    /**
-     * Controlla se l'utente è un super amministratore
-     */
-    public function isSuperAdmin(): bool
-    {
-        return $this->role === self::ROLE_SUPER_ADMIN;
-    }
+
 
     /**
      * Controlla se l'utente può gestire un progetto specifico
      */
     public function canManageProject($project): bool
     {
-        return $this->isSuperAdmin() ||
-            ($this->isProjectAdmin() && $project->user_id === $this->id);
+        return $this->isProjectAdmin() && $project->user_id === $this->id;
     }
 }

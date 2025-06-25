@@ -14,12 +14,11 @@ class ProjectSeeder extends Seeder
     /**
      * Run the database seeds.
      */
+
     public function run(): void
     {
         // Ottieni utenti admin per collegarli ai progetti
-        $projectAdmins = User::where('role', User::ROLE_PROJECT_ADMIN)
-            ->orWhere('role', User::ROLE_SUPER_ADMIN)
-            ->get();
+        $projectAdmins = User::where('role', User::ROLE_PROJECT_ADMIN)->get();
 
         if ($projectAdmins->isEmpty()) {
             // Crea almeno un admin se non esiste
@@ -36,17 +35,56 @@ class ProjectSeeder extends Seeder
 
         // Crea 20 progetti di esempio
         for ($i = 0; $i < 20; $i++) {
+            // Seleziona prima una categoria casuale
+            $category = $categories->isEmpty() ? null : $categories->random();
+
+            // Determina le date di inizio e fine in base alla categoria
+            $startDate = now()->addDays(rand(10, 30));
+            $endDate = null;
+
+            if ($category) {
+                switch ($category->tag) {
+                    case 'ESC': // European Solidarity Corps (2 settimane - 12 mesi)
+                        // Da 14 giorni a 365 giorni
+                        $endDate = clone $startDate;
+                        $endDate->addDays(rand(14, 365));
+                        break;
+
+                    case 'YTH': // Youth Programs (5-21 giorni)
+                        $endDate = clone $startDate;
+                        $endDate->addDays(rand(5, 21));
+                        break;
+
+                    case 'TRG': // Training (2-10 giorni)
+                        $endDate = clone $startDate;
+                        $endDate->addDays(rand(2, 10));
+                        break;
+
+                    default:
+                        // Categoria sconosciuta, usa una durata standard
+                        $endDate = clone $startDate;
+                        $endDate->addDays(rand(5, 30));
+                }
+            } else {
+                // Nessuna categoria, usa una durata standard
+                $endDate = $startDate->copy()->addDays(rand(5, 30));
+            }
+
+            // Calcola la data di scadenza come un numero casuale di giorni prima della data di inizio
+            $expireDaysBefore = rand(14, 30); // La scadenza sarà da 14 a 30 giorni prima dell'inizio
+            $expireDate = (clone $startDate)->subDays($expireDaysBefore);
+
             Project::create([
                 'title' => 'Progetto di esempio ' . ($i + 1),
                 'user_id' => $projectAdmins->random()->id,
-                'category_id' => $categories->isEmpty() ? null : $categories->random()->id,
+                'category_id' => $category ? $category->id : null,
                 'association_id' => $associations->isEmpty() ? null : $associations->random()->id,
                 'status' => ['draft', 'published', 'archived'][rand(0, 2)],
                 'requested_people' => rand(1, 10),
                 'location' => ['Milano', 'Roma', 'Brescia', 'Torino'][rand(0, 3)],
-                'start_date' => now()->addDays(rand(10, 30)),
-                'end_date' => now()->addDays(rand(60, 90)),
-                'expire_date' => now()->addDays(rand(5, 10)),
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'expire_date' => $expireDate,
                 'sum_description' => 'Breve descrizione del progetto ' . ($i + 1),
                 'full_description' => 'Descrizione completa del progetto di esempio numero ' . ($i + 1),
                 'requirements' => 'Requisiti per partecipare al progetto ' . ($i + 1),

@@ -35,8 +35,7 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'user_id')
                     ->where(function ($query) {
-                        $query->where('role', User::ROLE_PROJECT_ADMIN)
-                                ->orWhere('role', User::ROLE_SUPER_ADMIN);
+                        $query->where('role', User::ROLE_PROJECT_ADMIN);
         });
     }
 
@@ -45,11 +44,6 @@ class Project extends Model
      */
     public function scopeManagedBy($query, User $user)
     {
-        if ($user->isSuperAdmin()) {
-            // Super admin vede tutti i progetti
-            return $query;
-        } 
-        
         // Project admin vede solo i suoi progetti
         return $query->where('user_id', $user->id);
     }

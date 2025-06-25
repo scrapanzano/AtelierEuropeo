@@ -63,6 +63,24 @@
         <div class="container py-5">
             <h1 class="section-title">Creiamo.<br>Connettiamo.</h1>
             <h1 class="section-subtitle">Scopri i progetti in evidenza.</h1>
+            
+            <!-- Container progetti in evidenza con scroll orizzontale -->
+            <div class="row flex-lg-wrap flex-nowrap overflow-auto pb-3 gx-4 py-5">
+                @forelse ($featuredProjects as $project)
+                    <!-- Card container: dimensioni reattive e flex-shrink-0 per scroll -->
+                    <div class="col-9 col-sm-7 col-md-5 col-lg-4 mb-4 flex-shrink-0 flex-lg-shrink-1">
+                        <x-project-card :project="$project" />
+                    </div>
+                @empty
+                    <div class="col-12 text-center py-4">
+                        <p class="lead">Nessun progetto disponibile al momento.</p>
+                    </div>
+                @endforelse
+            </div>
+            
+            <div class="text-center">
+                <a href="{{ route('project.index') }}" class="btn btn-lg btn-primary btn-rounded">Vedi tutti i progetti</a>
+            </div>
         </div>
     </section>
 
