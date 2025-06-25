@@ -2,176 +2,59 @@
 
 namespace App\Models;
 
-class Project
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Project extends Model
 {
-    private $id;
-    private $title;
-    private $category;
-    private $creator;
-    private $creatorID;
-    private $requestedPeople;
-    private $place;
-    private $startDate;
-    private $endDate;
-    private $expireDate;
-    private $associationName;
-    private $associationDescription;
-    private $sumDescription;
-    private $fullDescription;
-    private $requirements;
-    private $travelConditions;
+    /** @use HasFactory<\Database\Factories\ProjectFactory> */
+    use HasFactory;
+    protected $table = 'projects';
 
+    protected $fillable = [
+        'title',
+        'user_id',
+        'category_id',
+        'association_id',
+        'status',
+        'requested_people',
+        'location',
+        'start_date',
+        'end_date',
+        'expire_date',
+        'sum_description',
+        'full_description',
+        'requirements',
+        'travel_conditions',
+    ];
 
-    public function __construct($id, $title, $category, $creator, $creatorID, $requestedPeople, $place, $startDate, $endDate, $expireDate, $associationName, $associationDescription, $sumDescription, $fullDescription, $requirements, $travelConditions)
+    /**
+     * Relazione: un progetto appartiene a un admin (user_id)
+     */
+    public function admin()
     {
-        $this->id = $id;
-        $this->title = $title;
-        $this->category = $category;
-        $this->creator = $creator;
-        $this->creatorID = $creatorID;
-        $this->requestedPeople = $requestedPeople;
-        $this->place = $place;
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
-        $this->expireDate = $expireDate;
-        $this->associationName = $associationName;
-        $this->associationDescription = $associationDescription;
-        $this->sumDescription = $sumDescription;
-        $this->fullDescription = $fullDescription;
-        $this->requirements = $requirements;
-        $this->travelConditions = $travelConditions;
+        return $this->belongsTo(User::class, 'user_id')
+                    ->where(function ($query) {
+                        $query->where('role', User::ROLE_PROJECT_ADMIN);
+        });
     }
 
-    // Getters
-
-    function getID() {
-        return $this->id;
+    /**
+     * Scope: filtra progetti gestiti da un admin specifico
+     */
+    public function scopeManagedBy($query, User $user)
+    {
+        // Project admin vede solo i suoi progetti
+        return $query->where('user_id', $user->id);
     }
 
-    function getTitle() {
-        return $this->title;
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
-    function getCategory() {
-        return $this->category;
-    }
-
-    function getCreator() {
-        return $this->creator;
-    }
-
-    function getCreatorID(){
-        return $this->creatorID;
-    }
-
-    function getRequestedPeople() {
-        return $this->requestedPeople;
-    }
-
-    function getPlace() {
-        return $this->place;
-    }
-
-    function getStartDate() {
-        return $this->startDate;
-    }
-
-    function getEndDate() {
-        return $this->endDate;
-    }
-
-    function getExpireDate() {
-        return $this->expireDate;
-    }
-
-    function getAssociationName() {
-        return $this->associationName;
-    }
-
-    function getAssociationDescription() {
-        return $this->associationDescription;
-    }
-
-    function getSumDescription() {
-        return $this->sumDescription;
-    }
-
-    function getFullDescription() {
-        return $this->fullDescription;
-    }
-
-    function getRequirements() {
-        return $this->requirements;
-    }
-
-    function getTravelConditions() {
-        return $this->travelConditions;
-    }
-
-    // Setters
-
-    function setID($id) {
-        $this->id = $id;
-    }
-
-    function setTitle($title) {
-        $this->id = $title;
-    }
-
-    function setCategory($category) {
-        $this->category = $category;
-    }
-
-    function setCreator($creator) {
-        $this->creator = $creator;
-    }
-
-    function setCreatorID($creatorID) {
-        $this->creatorID = $creatorID;
-    }
-
-    function setRequestedPeople($requestedPeople) {
-        $this->requestedPeople = $requestedPeople;
-    }
-
-    function setPlace($place) {
-        $this->place = $place;
-    }
-
-    function setStartDate($startDate) {
-        $this->startDate = $startDate;
-    }
-
-    function setEndDate($endDate) {
-        $this->endDate = $endDate;
-    }
-
-    function setExpireDate($expireDate) {
-        $this->expireDate = $expireDate;
-    }
-
-    function setAssociationName($associationName) {
-        $this->associationName = $associationName;
-    }
-
-    function setAssociationDescription($associationDescription) {
-        $this->associationDescription = $associationDescription;
-    }
-
-    function setSumDescription($sumDescription) {
-        $this->sumDescription = $sumDescription;
-    }
-
-    function setFullDescription($fullDescription) {
-        $this->fullDescription = $fullDescription;
-    }
-
-    function setRequirements($requirements) {
-        $this->requirements = $requirements;
-    }
-
-    function setTravelConditions($travelConditions) {
-        $this->travelConditions = $travelConditions;
+    public function association()
+    {
+        return $this->belongsTo(Association::class, 'association_id');
     }
 }
-

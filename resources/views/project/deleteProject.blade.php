@@ -8,7 +8,7 @@
             <div class="col-md-12">
                 <header>
                     <h1>
-                        Delete project "{{ $project->getTitle() }}" from the list
+                        Delete project "{{ $project->title }}" from the list
                     </h1>
                 </header>
                 <p class="confirm">
@@ -30,7 +30,7 @@
                             The project <strong>will be permanently removed</strong> from the data base
                         </p>
                         <form name="project.delete" method="post"
-                            action="{{ route('project.destroy', ['project' => $project->getId()]) }}">
+                            action="{{ route('project.destroy', ['project' => $project->id]) }}">
                             @method('DELETE')
                             @csrf
                             <label for="mySubmit" class="btn btn-danger"><i class="bi bi-trash"></i> Delete</label>

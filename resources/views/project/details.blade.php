@@ -15,8 +15,8 @@
                         'TRG' => 'Corsi di Formazione',
                     ];
 
-                    $category = $project->getCategory();
-                    $breadcrumbCategory = $projectCategory[$category];
+                    $category = $project->category;
+                    $breadcrumbCategory = $projectCategory[$category->tag];
                 @endphp
                 <li class="breadcrumb-item" aria-current="page"><a href="{{ route('home') }}">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('project.index') }}">Progetti
@@ -24,7 +24,7 @@
                 </li>
                 <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('project.index') }}">
                         {{ $breadcrumbCategory }}</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ $project->getTitle() }}</li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $project->title }}</li>
             </ol>
         </nav>
     </div>
@@ -36,7 +36,7 @@
             style="background-image: url('{{ asset('img/progetti/elf-start.png') }}'); min-height: 220px;">
             <div class="hero-overlay"></div>
             <div class="container position-relative text-center text-white py-4 py-md-5">
-                <h1 class="section-title">{{ $project->getTitle() }}</h1>
+                <h1 class="section-title">{{ $project->title }}</h1>
             </div>
         </div>
         <div class="row py-2 py-md-3 mb-3 g-2 align-items-center">
@@ -50,22 +50,22 @@
         </div>
         <ul class="list-unstyled mb-4">
             <li class="mb-2 d-flex align-items-center flex-wrap"><i class="bi bi-person-fill me-2"></i> <span>{{
-                    $project->getRequestedPeople() }} persona/e</span></li>
+                    $project->requested_people }} persona/e</span></li>
             <li class="mb-2 d-flex align-items-center flex-wrap"><i class="bi bi-geo-alt-fill me-2"></i> <span>{{
-                    $project->getPlace() }}</span></li>
+                    $project->location }}</span></li>
             <li class="mb-2 d-flex align-items-center flex-wrap"><i class="bi bi-calendar-event-fill me-2"></i> <span>Da
-                    {{ $project->getStartDate() }} a {{ $project->getEndDate() }}</span></li>
+                    {{ $project->start_date }} a {{ $project->end_date }}</span></li>
             <li class="text-danger d-flex align-items-center flex-wrap"><i class="bi bi-calendar2-x-fill me-2"></i> <span>Scadenza:
-                    {{ $project->getExpireDate() }}</span></li>
+                    {{ $project->expire_date }}</span></li>
         </ul>
-        <h3 class="fw-bold py-3 fs-4 fs-md-3">Chi è l'associazione {{ $project->getAssociationName() }}</h3>
-        <p class="lead">{{ $project->getAssociationDescription() ?? '...' }}</p>
+        <h3 class="fw-bold py-3 fs-4 fs-md-3">Chi è l'associazione {{ $project->association->name }}</h3>
+        <p class="lead">{{ $project->association->description}}</p>
         <h3 class="fw-bold py-3 fs-4 fs-md-3">Il viaggio in pillole</h3>
-        <p class="lead">{{ $project->getFullDescription() }}</p>
+        <p class="lead">{{ $project->full_description }}</p>
         <h3 class="fw-bold py-3 fs-4 fs-md-3">Requisiti di partecipazione</h3>
-        <p class="lead">{{ $project->getRequirements() }}</p>
+        <p class="lead">{{ $project->requirements }}</p>
         <h3 class="fw-bold py-3 fs-4 fs-md-3">Condizioni economiche e di viaggio</h3>
-        <p class="lead">{{ $project->getTravelConditions() }}</p>
+        <p class="lead">{{ $project->travel_conditions }}</p>
         <div class="container text-center">
             <h1 class="fw-bold py-3 fs-3 fs-md-2">Presenta la tua candidatura!</h1>
             <button class="btn btn-primary btn-lg btn-rounded px-4 py-2"><i class="bi bi-bookmark-plus-fill"></i>

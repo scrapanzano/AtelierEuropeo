@@ -18,6 +18,8 @@ class ProjectController extends Controller
         return view('project.projects')->with('projectsList', $projectsList);
     }
 
+
+
     /**
      * Show the form for creating a new resource.
      */
