@@ -43,10 +43,6 @@
                         <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="{{ route('about') }}">Chi
                             siamo</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link @yield('active_progetti')" aria-current="page"
-                            href="{{ route('project.index') }}">Progetti disponibili</a>
-                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @yield('active_viaggiare')" href="#" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -58,6 +54,10 @@
                             <li><a class="dropdown-item" href="#">Corsi di Formazione</a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('active_progetti')" aria-current="page"
+                            href="{{ route('project.index') }}">Progetti disponibili</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @yield('active_contatti')" aria-current="page" href="#">Contatti</a>
