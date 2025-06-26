@@ -29,10 +29,9 @@ Route::get('/about', [FrontController::class, 'getAbout'])->name('about');
 
 // Progetti
 Route::resource('project', ProjectController::class);
-Route::get('/project/{id}/destroy/confirm', [ProjectController::class, 'confirmDestroy'])->name('project.destroy.confirm');
 
 Route::middleware(['auth', 'isRegisteredUser'])->group(function () {
-
+    
 });
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {

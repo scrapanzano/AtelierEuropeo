@@ -63,6 +63,20 @@
                         <a class="nav-link @yield('active_contatti')" aria-current="page" href="#">Contatti</a>
                     </li>
                 </ul>
+                @if (auth()->check())
+                    <div class="d-flex gap-2">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Esci</button>
+                        </form>
+                    </div>
+                @else
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('login') }}" class="btn btn-outline-light">Accedi</a>
+                        <a href="{{ route('register') }}" class="btn btn-warning">Registrati</a>
+                    </div>
+                @endif
+
             </div>
         </div>
     </nav>

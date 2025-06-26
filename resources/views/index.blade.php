@@ -69,7 +69,15 @@
                 @forelse ($featuredProjects as $project)
                     <!-- Card container: dimensioni reattive e flex-shrink-0 per scroll -->
                     <div class="col-9 col-sm-7 col-md-5 col-lg-4 mb-4 flex-shrink-0 flex-lg-shrink-1">
-                        <x-project-card :project="$project" />
+                        @if (auth()->check())
+                            @if (auth()->user()->role === 'project_admin')
+                                <x-project-card :project="$project" :showAdminOptions="true" :showFavoriteIcon="false" />
+                            @else
+                                <x-project-card :project="$project" :showAdminOptions="false" :showFavoriteIcon="true" />
+                            @endif
+                        @else
+                            <x-project-card :project="$project" :showAdminOptions="false" :showFavoriteIcon="true" />
+                        @endif
                     </div>
                 @empty
                     <div class="col-12 text-center py-4">
