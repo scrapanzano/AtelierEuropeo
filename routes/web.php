@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\CreatorController;
-use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
-// require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';
 
 // Home
 Route::get('/', [FrontController::class, 'getHome'])->name('home');
@@ -32,6 +31,15 @@ Route::get('/about', [FrontController::class, 'getAbout'])->name('about');
 Route::resource('project', ProjectController::class);
 Route::get('/project/{id}/destroy/confirm', [ProjectController::class, 'confirmDestroy'])->name('project.destroy.confirm');
 
-// Creatori
-Route::resource('creator', CreatorController::class);
-Route::get('/creator/{id}/destroy/confirm', [CreatorController:: class, 'confirmDestroy'])->name('creator.destroy.confirm');
+Route::middleware(['auth', 'isRegisteredUser'])->group(function () {
+
+});
+
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/project/create', [ProjectController::class, 'create'])->name('project.create');
+    Route::post('/project', [ProjectController::class, 'store'])->name('project.store');
+    Route::get('/project/{id}/edit', [ProjectController::class, 'edit'])->name('project.edit');
+    Route::put('/project/{id}', [ProjectController::class, 'update'])->name('project.update');
+    Route::delete('/project/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
+    Route::get('/project/{id}/destroy/confirm', [ProjectController::class, 'confirmDestroy'])->name('project.destroy.confirm');
+});
