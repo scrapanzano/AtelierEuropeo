@@ -47,7 +47,7 @@
                 @if (auth()->check())
                     @if (auth()->user()->role === 'project_admin')
                         {{-- Admin: pulsante per modificare il progetto --}}
-                        <a href="#" class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2">
+                        <a href="{{ route('project.edit', ['id' => $project->id]) }}" class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2">
                             <i class="bi bi-pen me-2"></i> Modifica
                         </a>
                     @else

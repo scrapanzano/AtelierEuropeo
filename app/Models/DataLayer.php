@@ -51,5 +51,13 @@ class DataLayer {
         }
         return false;
     }
+
+    public function listCategories() {
+        return Category::orderBy('tag', 'asc')->get();
+    }
+
+    public function listAssociations() {
+        return Association::orderBy('name', 'asc')->get();
+    }
   
 }

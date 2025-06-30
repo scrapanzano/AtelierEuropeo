@@ -29,14 +29,11 @@ class Project extends Model
     ];
 
     /**
-     * Relazione: un progetto appartiene a un admin (user_id)
+     * Relazione: un progetto è creato da un utente
      */
-    public function admin()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'user_id')
-                    ->where(function ($query) {
-                        $query->where('role', User::ROLE_PROJECT_ADMIN);
-        });
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

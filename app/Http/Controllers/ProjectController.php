@@ -26,9 +26,12 @@ class ProjectController extends Controller
     public function create()
     {
         $dl = new DataLayer();
-        $creatorsList = $dl->listCreators();
+        $categories = $dl->listCategories();
+        $associations = $dl->listAssociations();
         
-        return view('project.editProject')->with('creatorsList', $creatorsList);
+        return view('project.editProject')
+            ->with('categories', $categories)
+            ->with('associations', $associations);
     }
 
     /**
@@ -36,7 +39,14 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        abort(501);
+        $dl = new DataLayer();
+        $project = $dl->addProject($request->all());
+        
+        if($project) {
+            return redirect()->route('project.show', $project->id)->with('success', 'Project created successfully!');
+        } else {
+            return redirect()->back()->with('error', 'Failed to create project.');
+        }
     }
 
     /**
@@ -60,11 +70,16 @@ class ProjectController extends Controller
     public function edit(string $id)
     {
         $dl = new DataLayer();
-        $creatorsList = $dl->listCreators();
         $project = $dl->findProjectByID($id);
 
         if($project != null) {
-            return view('project.editProject')->with('creatorsList', $creatorsList)->with('project', $project);
+            $categories = $dl->listCategories();
+            $associations = $dl->listAssociations();
+            
+            return view('project.editProject')
+                ->with('project', $project)
+                ->with('categories', $categories)
+                ->with('associations', $associations);
         } else {
             return view('errors.wrongID')->with('message', "Wrong project ID has been used!");
         }
@@ -75,7 +90,20 @@ class ProjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        abort(501);
+        $dl = new DataLayer();
+        $project = $dl->findProjectByID($id);
+
+        if($project != null) {
+            $updatedProject = $dl->editProject($id, $request->all());
+            
+            if($updatedProject) {
+                return redirect()->route('project.show', $id)->with('success', 'Project updated successfully!');
+            } else {
+                return redirect()->back()->with('error', 'Failed to update project.');
+            }
+        } else {
+            return view('errors.wrongID')->with('message', "Wrong project ID has been used!");
+        }
     }
 
     public function confirmDestroy($id) {

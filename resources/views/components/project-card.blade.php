@@ -88,7 +88,7 @@
                         <i class="bi bi-three-dots-vertical"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                        <li><a class="dropdown-item py-2 text-primary" href="#"><i
+                        <li><a class="dropdown-item py-2 text-primary" href="{{ route('project.edit', ['id' => $project->id]) }}"><i
                                     class="bi bi-pen-fill me-2"></i> Modifica</a></li>
                         <li>
                             <hr class="dropdown-divider my-1">
