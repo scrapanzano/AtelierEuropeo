@@ -4,9 +4,30 @@ namespace App\Models;
 
 class DataLayer {
 
-    public function listProjects() {
-        $projectsList = Project::orderBy('title', 'asc')->get();
-        return $projectsList;
+    public function listProjects($filters = [])
+    {
+        $query = Project::with(['category', 'association', 'user']);
+        
+        // Apply filters if provided
+        if (!empty($filters)) {
+            if (isset($filters['search'])) {
+                $query->search($filters['search']);
+            }
+            if (isset($filters['category_id'])) {
+                $query->byCategory($filters['category_id']);
+            }
+            if (isset($filters['association_id'])) {
+                $query->byAssociation($filters['association_id']);
+            }
+            if (isset($filters['location'])) {
+                $query->byLocation($filters['location']);
+            }
+            if (isset($filters['status'])) {
+                $query->byStatus($filters['status']);
+            }
+        }
+        
+        return $query->get();
     }
 
     public function getFeaturedProjects($limit = 6)

@@ -54,4 +54,64 @@ class Project extends Model
     {
         return $this->belongsTo(Association::class, 'association_id');
     }
+
+    /**
+     * Scope: ricerca per testo nei campi principali
+     */
+    public function scopeSearch($query, $search)
+    {
+        if ($search) {
+            return $query->where(function($q) use ($search) {
+                $q->where('title', 'LIKE', "%{$search}%")
+                  ->orWhere('sum_description', 'LIKE', "%{$search}%")
+                  ->orWhere('full_description', 'LIKE', "%{$search}%")
+                  ->orWhere('location', 'LIKE', "%{$search}%");
+            });
+        }
+        return $query;
+    }
+
+    /**
+     * Scope: filtra per categoria
+     */
+    public function scopeByCategory($query, $categoryId)
+    {
+        if ($categoryId) {
+            return $query->where('category_id', $categoryId);
+        }
+        return $query;
+    }
+
+    /**
+     * Scope: filtra per associazione
+     */
+    public function scopeByAssociation($query, $associationId)
+    {
+        if ($associationId) {
+            return $query->where('association_id', $associationId);
+        }
+        return $query;
+    }
+
+    /**
+     * Scope: filtra per località
+     */
+    public function scopeByLocation($query, $location)
+    {
+        if ($location) {
+            return $query->where('location', 'LIKE', "%{$location}%");
+        }
+        return $query;
+    }
+
+    /**
+     * Scope: filtra per stato
+     */
+    public function scopeByStatus($query, $status)
+    {
+        if ($status) {
+            return $query->where('status', $status);
+        }
+        return $query;
+    }
 }

@@ -10,12 +10,33 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $dl = new DataLayer();
-        $projectsList = $dl->listProjects();
+        
+        // Get filter data
+        $categories = $dl->listCategories();
+        $associations = $dl->listAssociations();
+        
+        // Get filtered projects
+        $filters = [
+            'search' => $request->get('search'),
+            'category_id' => $request->get('category_id'),
+            'association_id' => $request->get('association_id'),
+            'location' => $request->get('location'),
+        ];
 
-        return view('project.projects')->with('projectsList', $projectsList);
+        // Add status filter only for project_admin
+        if (auth()->check() && auth()->user()->role === 'project_admin') {
+            $filters['status'] = $request->get('status');
+        }
+        
+        $projectsList = $dl->listProjects($filters);
+
+        return view('project.projects')
+            ->with('projectsList', $projectsList)
+            ->with('categories', $categories)
+            ->with('associations', $associations);
     }
 
 
@@ -122,6 +143,8 @@ class ProjectController extends Controller
      */
     public function destroy(string $id)
     {
-        abort(501);
+        $dl = new DataLayer();
+        $deleted = $dl->deleteProject($id);
+        return redirect()->route('project.index')->with('success', 'Project deleted successfully!');
     }
 }
