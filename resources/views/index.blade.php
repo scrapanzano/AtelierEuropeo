@@ -70,7 +70,7 @@
                     <!-- Card container: dimensioni reattive e flex-shrink-0 per scroll -->
                     <div class="col-9 col-sm-7 col-md-5 col-lg-4 mb-4 flex-shrink-0 flex-lg-shrink-1">
                         @if (auth()->check())
-                            @if (auth()->user()->role === 'project_admin')
+                            @if (auth()->user()->role === 'admin')
                                 <x-project-card :project="$project" :showAdminOptions="true" :showFavoriteIcon="false" />
                             @else
                                 <x-project-card :project="$project" :showAdminOptions="false" :showFavoriteIcon="true" />

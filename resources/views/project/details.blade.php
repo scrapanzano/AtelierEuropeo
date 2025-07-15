@@ -33,7 +33,7 @@
 @section('body')
     <div class="container px-2 px-md-4 pb-5">
         <div class="hero-section d-flex align-items-center justify-content-center mb-4 px-2"
-            style="background-image: url('{{ asset('img/progetti/elf-start.png') }}'); min-height: 220px;">
+            style="background-image: url('{{ asset($project->image_path) }}'); min-height: 220px;">
             <div class="hero-overlay"></div>
             <div class="container position-relative text-center text-white py-4 py-md-5">
                 <h1 class="section-title">{{ $project->title }}</h1>
@@ -45,7 +45,7 @@
             </div>
             <div class="col-4 col-md-6 text-end">
                 @if (auth()->check())
-                    @if (auth()->user()->role === 'project_admin')
+                    @if (auth()->user()->role === 'admin')
                         {{-- Admin: pulsante per modificare il progetto --}}
                         <a href="{{ route('project.edit', ['id' => $project->id]) }}" class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2">
                             <i class="bi bi-pen me-2"></i> Modifica
@@ -94,7 +94,7 @@
                     {{ $project->start_date }} a {{ $project->end_date }}</span></li>
             <li class="mb-2 text-danger d-flex align-items-center flex-wrap"><i class="bi bi-calendar2-x-fill me-2"></i> <span>Scadenza:
                     {{ $project->expire_date }}</span></li>
-            @if (auth()->check() && auth()->user()->role === 'project_admin')
+            @if (auth()->check() && auth()->user()->role === 'admin')
                 {{-- Informazione status solo per admin --}}
                 <li class="mb-2 d-flex align-items-center flex-wrap">
                     <i class="bi bi-info-circle-fill me-2"></i> 
@@ -103,12 +103,12 @@
                             $statusColors = [
                                 'draft' => 'text-secondary',
                                 'published' => 'text-success',
-                                'archived' => 'text-danger',
+                                'completed' => 'text-danger',
                             ];
                             $statusLabels = [
                                 'draft' => 'Bozza',
                                 'published' => 'Pubblicato',
-                                'archived' => 'Chiuso',
+                                'completed' => 'Completato',
                             ];
                             $statusColor = $statusColors[$project->status] ?? 'text-dark';
                             $statusLabel = $statusLabels[$project->status] ?? $project->status;
@@ -127,7 +127,7 @@
         <h3 class="fw-bold py-3 fs-4 fs-md-3">Condizioni economiche e di viaggio</h3>
         <p class="lead">{{ $project->travel_conditions }}</p>
         <div class="container text-center">
-            @if (auth()->check() && auth()->user()->role === 'project_admin')
+            @if (auth()->check() && auth()->user()->role === 'admin')
                 {{-- Sezione per amministratori --}}
                 <h1 class="fw-bold py-3 fs-3 fs-md-2">Gestisci questo progetto</h1>
                 <p class="lead mb-4">Visualizza e gestisci le candidature ricevute per questo progetto.</p>

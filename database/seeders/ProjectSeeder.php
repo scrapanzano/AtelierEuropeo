@@ -18,13 +18,13 @@ class ProjectSeeder extends Seeder
     public function run(): void
     {
         // Ottieni utenti admin per collegarli ai progetti
-        $projectAdmins = User::where('role', User::ROLE_PROJECT_ADMIN)->get();
+        $projectAdmins = User::where('role', 'admin')->get();
 
         if ($projectAdmins->isEmpty()) {
             // Crea almeno un admin se non esiste
             $admin = User::factory()->create([
-                'role' => User::ROLE_PROJECT_ADMIN,
-                'name' => 'Admin Progetti',
+                'role' => 'admin',
+                'name' => 'Admin',
                 'email' => 'admin.progetti@esempio.com'
             ]);
             $projectAdmins = collect([$admin]);
@@ -79,7 +79,8 @@ class ProjectSeeder extends Seeder
                 'user_id' => $projectAdmins->random()->id,
                 'category_id' => $category ? $category->id : null,
                 'association_id' => $associations->isEmpty() ? null : $associations->random()->id,
-                'status' => ['draft', 'published', 'archived'][rand(0, 2)],
+                'image_path' => 'img/projects/default.png',
+                'status' => ['draft', 'published', 'completed'][rand(0, 2)],
                 'requested_people' => rand(1, 10),
                 'location' => ['Milano', 'Roma', 'Brescia', 'Torino'][rand(0, 3)],
                 'start_date' => $startDate,

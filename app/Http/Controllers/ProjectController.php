@@ -122,6 +122,8 @@ class ProjectController extends Controller
      */
     public function destroy(string $id)
     {
-        abort(501);
+        $dl = new DataLayer();
+        $deleted = $dl->deleteProject($id);
+        return redirect()->route('project.index')->with('success', 'Project deleted successfully!');
     }
 }

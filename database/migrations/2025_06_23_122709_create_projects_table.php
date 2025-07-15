@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('association_id')->constrained('associations')->onDelete('cascade');
-            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
+            $table->string('image_path');
+            $table->enum('status', ['draft', 'published', 'completed'])->default('draft');
             $table->integer('requested_people')->default(0);
             $table->string('location');
             $table->date('start_date');

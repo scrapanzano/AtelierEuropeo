@@ -15,7 +15,7 @@ class isAdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ((!auth()->check()) || (auth()->user()->role != 'project_admin')) {
+        if ((!auth()->check()) || (auth()->user()->role != 'admin')) {
             return response()->view(
                 'errors.accessDenied',
                 ['message' => 'Only administrators can access this page!'],

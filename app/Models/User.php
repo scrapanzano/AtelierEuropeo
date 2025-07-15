@@ -12,9 +12,6 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    public const ROLE_USER = 'user';
-    public const ROLE_PROJECT_ADMIN = 'project_admin';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -53,5 +50,10 @@ class User extends Authenticatable
     public function projects()
     {
         return $this->hasMany(Project::class, 'user_id');
+    }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'user_id');
     }
 }

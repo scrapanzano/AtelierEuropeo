@@ -15,7 +15,7 @@
             <div class="col-8 col-md-6">
                 <h3 class="fw-bold mb-0 fs-2 fs-lg-1">Progetti Disponibili</h3>
             </div>
-            @if (auth()->check() && auth()->user()->role === 'project_admin')
+            @if (auth()->check() && auth()->user()->role === 'admin')
                 <div class="col-4 col-md-6 text-end">
                     <a href="{{ route('project.create') }}"
                         class="btn btn-success btn-rounded d-inline-flex align-items-center px-3 py-2 px-md-4">
@@ -33,9 +33,9 @@
         <div class="row flex-lg-wrap flex-nowrap overflow-auto pb-3 gx-4">
             @foreach ($projectsList as $project)
                 <!-- Card container: dimensioni reattive e flex-shrink-0 per scroll -->
-                <div class="col-9 col-sm-7 col-md-5 col-lg-4 mb-4 flex-shrink-0 flex-lg-shrink-1">
+                <div class="col-6 col-sm-7 col-md-5 col-lg-4 mb-4 flex-shrink-0 flex-lg-shrink-1">
                     @if (auth()->check())
-                        @if (auth()->user()->role === 'project_admin')
+                        @if (auth()->user()->role === 'admin')
                             <x-project-card :project="$project" :showAdminOptions="true" :showFavoriteIcon="false" />
                         @else
                             <x-project-card :project="$project" :showAdminOptions="false" :showFavoriteIcon="true" />

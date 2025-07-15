@@ -13,9 +13,10 @@ class Project extends Model
 
     protected $fillable = [
         'title',
-        'user_id',
+        'author_id',
         'category_id',
         'association_id',
+        'image_path',
         'status',
         'requested_people',
         'location',
@@ -28,21 +29,9 @@ class Project extends Model
         'travel_conditions',
     ];
 
-    /**
-     * Relazione: un progetto è creato da un utente
-     */
-    public function user()
+    public function author()
     {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * Scope: filtra progetti gestiti da un admin specifico
-     */
-    public function scopeManagedBy($query, User $user)
-    {
-        // Project admin vede solo i suoi progetti
-        return $query->where('user_id', $user->id);
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     public function category()
@@ -53,5 +42,15 @@ class Project extends Model
     public function association()
     {
         return $this->belongsTo(Association::class, 'association_id');
+    }
+
+    public function application()
+    {
+        return $this->hasMany(Application::class, 'project_id');
+    }
+
+    public function testimonial()
+    {
+        return $this->hasMany(Testimonial::class, 'project_id');
     }
 }

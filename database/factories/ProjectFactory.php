@@ -21,11 +21,12 @@ class ProjectFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(3),
-            'user_id' => User::factory(),
+            'author_id' => User::factory(),
             'category_id' => Category::factory(),
             'association_id' => Association::factory(),
-            'status' => $this->faker->randomElement(['draft', 'published', 'archived']),
-            'requested_people' => $this->faker->numberBetween(1, 100),
+            'image_path' => $this->faker->imageUrl(640, 480, 'projects', true),
+            'status' => $this->faker->randomElement(['draft', 'published', 'completed']),
+            'requested_people' => $this->faker->numberBetween(1, 20),
             'location' => $this->faker->city,
             'start_date' => $this->faker->dateTimeBetween('now', '+1 year'),
             'end_date' => $this->faker->dateTimeBetween('+1 year', '+2 years'),

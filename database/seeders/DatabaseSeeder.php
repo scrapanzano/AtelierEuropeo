@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,       
             CategorySeeder::class,   
             AssociationSeeder::class, 
-            ProjectSeeder::class,      
+            ProjectSeeder::class,
+            TestimonialSeeder::class,      
         ]);
     }
 }

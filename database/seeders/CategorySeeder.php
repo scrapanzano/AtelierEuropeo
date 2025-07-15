@@ -15,18 +15,18 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
-                'tag' => 'ESC',
-                'description' => 'European Solidarity Corps'
+                'name' => 'European Solidarity Corps',
+                'tag' => 'ESC',   
             ],
             [
+                'name' => 'Youth',
                 'tag' => 'YTH',
-                'description' => 'Youth Programs'
             ],
             [
+                'name' => 'Training',
                 'tag' => 'TRG',
-                'description' => 'Training and Education'
             ],
-            // Puoi aggiungere altre categorie qui
+            
         ];
 
         foreach ($categories as $category) {

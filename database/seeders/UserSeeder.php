@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'admin@atelier.it',
             'password' => Hash::make('password'),
-            'role' => 'project_admin'
+            'role' => 'admin'
         ]);
 
         User::factory()->create([

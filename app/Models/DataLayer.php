@@ -5,7 +5,7 @@ namespace App\Models;
 class DataLayer {
 
     public function listProjects() {
-        $projectsList = Project::orderBy('title', 'asc')->get();
+        $projectsList = Project::orderBy('created_at', 'asc')->get();
         return $projectsList;
     }
 
@@ -19,7 +19,7 @@ class DataLayer {
     }
 
     public function findAuthorById($id) {
-        return User::find($id)->where('role', 'project_admin')->first();
+        return User::find($id)->where('role', 'admin')->first();
     }
 
     public function findProjectById($id) {
