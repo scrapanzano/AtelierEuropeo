@@ -126,8 +126,58 @@
         <p class="lead">{{ $project->requirements }}</p>
         <h3 class="fw-bold py-3 fs-4 fs-md-3">Condizioni economiche e di viaggio</h3>
         <p class="lead">{{ $project->travel_conditions }}</p>
+        
+        {{-- Sezione testimonianze per progetti completati --}}
+        @if($project->status === 'completed')
+            <h3 class="fw-bold py-3 fs-4 fs-md-3">
+                <i class="bi bi-chat-quote me-2"></i>Testimonianze
+            </h3>
+            @if($project->testimonial && $project->testimonial->count() > 0)
+                <div class="row g-4 mb-4">
+                    @foreach($project->testimonial as $testimonial)
+                        <div class="col-12 col-md-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                            <i class="bi bi-person text-white fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">{{ $testimonial->author->name }}</h6>
+                                            <small class="text-muted">Partecipante</small>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">{{ $testimonial->content }}</p>
+                                    <div class="text-end">
+                                        <i class="bi bi-quote text-primary fs-3"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Non sono ancora disponibili testimonianze per questo progetto completato.
+                </div>
+            @endif
+        @endif
+
         <div class="container text-center">
-            @if (auth()->check() && auth()->user()->role === 'admin')
+            @if($project->status === 'completed')
+                {{-- Sezione per progetti completati --}}
+                <h1 class="fw-bold py-3 fs-3 fs-md-2">Progetto Completato</h1>
+                <p class="lead mb-4">Questo progetto è stato completato con successo. Scopri altri progetti disponibili o lasciati ispirare dalle testimonianze!</p>
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                    <a href="{{ route('project.index') }}" class="btn btn-primary btn-lg btn-rounded px-4 py-2">
+                        <i class="bi bi-search me-2"></i> Scopri Altri Progetti
+                    </a>
+                    <a href="{{ route('project.portfolio') }}" class="btn btn-outline-primary btn-lg btn-rounded px-4 py-2">
+                        <i class="bi bi-collection me-2"></i> Vedi Portfolio
+                    </a>
+                </div>
+            @elseif (auth()->check() && auth()->user()->role === 'admin')
                 {{-- Sezione per amministratori --}}
                 <h1 class="fw-bold py-3 fs-3 fs-md-2">Gestisci questo progetto</h1>
                 <p class="lead mb-4">Visualizza e gestisci le candidature ricevute per questo progetto.</p>
@@ -135,7 +185,7 @@
                     <i class="bi bi-people-fill me-2"></i> Gestisci Candidature
                 </button>
             @else
-                {{-- Sezione per utenti normali --}}
+                {{-- Sezione per utenti normali con progetti attivi --}}
                 <h1 class="fw-bold py-3 fs-3 fs-md-2">Presenta la tua candidatura!</h1>
                 @if (auth()->check())
                     {{-- Utente registrato: pulsante per candidarsi --}}
@@ -174,25 +224,4 @@
     </div>
 @endsection
 
-{{-- Script per gestire i preferiti --}}
-<script>
-function addToFavorites(projectId) {
-    // TODO: Implementare la logica per aggiungere ai preferiti
-    console.log('Aggiungere il progetto ' + projectId + ' ai preferiti dalla pagina dettagli');
-    
-    // Placeholder: qui puoi implementare la chiamata AJAX per salvare il preferito
-    // Esempio:
-    // fetch('/favorites/' + projectId, {
-    //     method: 'POST',
-    //     headers: {
-    //         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({project_id: projectId})
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //     // Gestire la risposta (cambiare icona, mostrare messaggio, etc.)
-    // });
-}
-</script>
+

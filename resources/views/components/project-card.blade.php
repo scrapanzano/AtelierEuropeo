@@ -72,12 +72,8 @@
                     if ($durationDays > 60) {
                         // Se supera i 60 giorni, mostra in mesi e giorni
                         $months = floor($durationDays / 30);
-                        $remainingDays = $durationDays % 30;
 
                         $durationText = $months . ' ' . ($months == 1 ? 'mese' : 'mesi');
-                        if ($remainingDays > 0) {
-                            $durationText .= ' e ' . $remainingDays . ' ' . ($remainingDays == 1 ? 'giorno' : 'giorni');
-                        }
                     } else {
                         $durationText = $durationDays . ' ' . ($durationDays == 1 ? 'giorno' : 'giorni');
                     }
@@ -113,6 +109,48 @@
             @endif
         </div>
         <p class="card-text pt-2">{{ $project->sum_description }}</p>
+        
+        {{-- Informazioni amministrative per admin --}}
+        @if ($showAdminOptions)
+            <div class="admin-info mt-3 pt-3 border-top">
+                <div class="row g-2 small text-muted">
+                    <div class="col-6">
+                        <strong>Status:</strong>
+                        @php
+                            $statusLabels = [
+                                'draft' => ['text' => 'Bozza', 'class' => 'text-secondary'],
+                                'published' => ['text' => 'Pubblicato', 'class' => 'text-success'],
+                                'completed' => ['text' => 'Completato', 'class' => 'text-warning']
+                            ];
+                            $status = $statusLabels[$project->status] ?? ['text' => $project->status, 'class' => 'text-muted'];
+                        @endphp
+                        <span class="{{ $status['class'] }} fw-semibold">{{ $status['text'] }}</span>
+                    </div>
+                    <div class="col-6">
+                        <strong>Candidature:</strong> {{ $project->application->count() }}/{{ $project->requested_people }}
+                    </div>
+                    <div class="col-6">
+                        <strong>Scadenza:</strong>
+                        @php
+                            $expireDate = \Carbon\Carbon::parse($project->expire_date);
+                            $isExpired = $expireDate->isPast();
+                            $daysToExpire = (int) $expireDate->diffInDays(now());
+                        @endphp
+                        <span class="{{ $isExpired ? 'text-danger' : ($daysToExpire <= 7 ? 'text-danger' : 'text-muted') }}">
+                            {{ $expireDate->format('d/m/Y') }}
+                            @if (!$isExpired && $daysToExpire <= 7)
+                                ({{ $daysToExpire }} giorni)
+                            @elseif ($isExpired)
+                                (Scaduto)
+                            @endif
+                        </span>
+                    </div>
+                    <div class="col-6">
+                        <strong>Associazione:</strong> {{ $project->association->name ?? 'N/D' }}
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 

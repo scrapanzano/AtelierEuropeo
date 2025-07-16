@@ -27,8 +27,16 @@ Route::get('/', [FrontController::class, 'getHome'])->name('home');
 // About
 Route::get('/about', [FrontController::class, 'getAbout'])->name('about');
 
-// Progetti
-Route::resource('project', ProjectController::class);
+// Portfolio progetti (progetti chiusi con testimonianze)
+Route::get('/portfolio', [ProjectController::class, 'portfolio'])->name('project.portfolio');
+
+// Progetti con controllo accesso per status
+Route::get('/project', [ProjectController::class, 'index'])
+    ->middleware('checkProjectAccess')
+    ->name('project.index');
+
+// Progetti - altre route
+Route::get('/project/{project}', [ProjectController::class, 'show'])->name('project.show');
 
 Route::middleware(['auth', 'isRegisteredUser'])->group(function () {
     

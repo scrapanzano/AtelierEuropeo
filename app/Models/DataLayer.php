@@ -9,6 +9,11 @@ class DataLayer {
         return $projectsList;
     }
 
+    public function listProjectsByStatus($status) {
+        $projectsList = Project::where('status', $status)->orderBy('created_at', 'asc')->get();
+        return $projectsList;
+    }
+
     public function getFeaturedProjects($limit = 6)
     {
         // Recupera progetti pubblicati in ordine casuale
@@ -58,6 +63,14 @@ class DataLayer {
 
     public function listAssociations() {
         return Association::orderBy('name', 'asc')->get();
+    }
+
+    public function getRandomTestimonials($limit = 3) {
+        // Recupera testimonianze casuali con i relativi autori e progetti
+        return Testimonial::with(['author', 'project'])
+                         ->inRandomOrder()
+                         ->limit($limit)
+                         ->get();
     }
   
 }

@@ -43,6 +43,10 @@
                         <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="{{ route('about') }}">Chi
                             siamo</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('active_portfolio')" aria-current="page"
+                            href="{{ route('project.portfolio') }}">Portfolio progetti</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @yield('active_viaggiare')" href="#" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -84,6 +88,7 @@
     @yield('breadcrumb')
 
     @yield('body')
+
 </body>
 
 </html>

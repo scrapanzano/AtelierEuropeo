@@ -39,7 +39,7 @@ class ProjectSeeder extends Seeder
             $category = $categories->isEmpty() ? null : $categories->random();
 
             // Determina le date di inizio e fine in base alla categoria
-            $startDate = now()->addDays(rand(10, 30));
+            $startDate = now()->addDays(rand(30, 60));
             $endDate = null;
 
             if ($category) {
@@ -70,9 +70,37 @@ class ProjectSeeder extends Seeder
                 $endDate = $startDate->copy()->addDays(rand(5, 30));
             }
 
-            // Calcola la data di scadenza come un numero casuale di giorni prima della data di inizio
-            $expireDaysBefore = rand(14, 30); // La scadenza sarà da 14 a 30 giorni prima dell'inizio
-            $expireDate = (clone $startDate)->subDays($expireDaysBefore);
+            // Determina lo status del progetto
+            $status = ['draft', 'published', 'completed'][rand(0, 2)];
+            
+            // Calcola la data di scadenza in base allo status
+            if ($status === 'completed') {
+                // Se il progetto è completato, la scadenza deve essere nel passato
+                $expireDate = now()->subDays(rand(1, 60)); // Scaduto da 1 a 60 giorni fa
+                // Anche le date di inizio e fine dovrebbero essere nel passato per progetti completati
+                $startDate = now()->subDays(rand(90, 180));
+                if ($category) {
+                    switch ($category->tag) {
+                        case 'ESC':
+                            $endDate = (clone $startDate)->addDays(rand(14, 365));
+                            break;
+                        case 'YTH':
+                            $endDate = (clone $startDate)->addDays(rand(5, 21));
+                            break;
+                        case 'TRG':
+                            $endDate = (clone $startDate)->addDays(rand(2, 10));
+                            break;
+                        default:
+                            $endDate = (clone $startDate)->addDays(rand(5, 30));
+                    }
+                } else {
+                    $endDate = (clone $startDate)->addDays(rand(5, 30));
+                }
+            } else {
+                // Per progetti draft o published, mantieni la logica originale
+                $expireDaysBefore = rand(14, 30); // La scadenza sarà da 14 a 30 giorni prima dell'inizio
+                $expireDate = (clone $startDate)->subDays($expireDaysBefore);
+            }
 
             Project::create([
                 'title' => 'Progetto di esempio ' . ($i + 1),
@@ -80,7 +108,7 @@ class ProjectSeeder extends Seeder
                 'category_id' => $category ? $category->id : null,
                 'association_id' => $associations->isEmpty() ? null : $associations->random()->id,
                 'image_path' => 'img/projects/default.png',
-                'status' => ['draft', 'published', 'completed'][rand(0, 2)],
+                'status' => $status,
                 'requested_people' => rand(1, 10),
                 'location' => ['Milano', 'Roma', 'Brescia', 'Torino'][rand(0, 3)],
                 'start_date' => $startDate,

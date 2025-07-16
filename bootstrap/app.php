@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'isAdmin' => App\Http\Middleware\isAdminMiddleware::class,
             'isRegisteredUser' => App\Http\Middleware\isRegisteredUserMiddleware::class,
+            'checkProjectAccess' => App\Http\Middleware\CheckProjectStatusAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
