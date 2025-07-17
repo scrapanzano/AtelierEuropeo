@@ -126,7 +126,7 @@
                 <h1 class="section-subtitle">Le testimonianze di chi ha vissuto l'Europa con Atelier Europeo.</h1>
             </div>
             
-            @if($randomTestimonials && $randomTestimonials->count() > 0)
+            {{-- @if($randomTestimonials && $randomTestimonials->count() > 0)
                 <div class="row g-4 mb-5">
                     @foreach($randomTestimonials as $testimonial)
                         <div class="col-12 col-lg-4">
@@ -143,7 +143,31 @@
                         </div>
                     @endforeach
                 </div>
+            @endif --}}
+
+            @if($randomTestimonials && $randomTestimonials->count() > 0)
+                <div class="row g-4 mb-5">
+                    @foreach($randomTestimonials as $testimonial)
+                        <div class="col-12 col-lg-4">
+                            <div class="card border-0 h-100" style="background-color: transparent !important;">
+                                <a href="{{ route('project.show', ['project' => $testimonial->project->id]) }}" class="stretched-link"></a>
+                                <div class="card-header border-0 text-center" style="background-color: transparent !important;">
+                                    <i class="bi bi-quote" style="font-size: 1.4rem;"></i>
+                                </div>
+                                <div class="card-body border-0 text-center p-4">
+                                    <p class="lead fw-bold mb-3">{{ $testimonial->content }}</p>
+                                </div>
+                                <div class="card-footer border-0 text-center pt-3" style="background-color: transparent !important;">
+                                        <h6 class="fw-bold mb-1">{{ $testimonial->author->name }}</h6>
+                                        <small class="opacity-75">{{ $testimonial->project->title }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             @endif
+
+            
             
             <div class="text-center">
                 <a href="{{ route('project.portfolio') }}" class="btn btn-lg btn-outline-primary btn-rounded">
