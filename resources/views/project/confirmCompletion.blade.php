@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'AE - Elimina Progetto')
+@section('title', 'AE - Conferma Completamento Progetto')
 
 @section('active_progetti', 'active')
 
@@ -10,21 +10,21 @@
         <div class="col-lg-8 col-xl-6">
             <!-- Header -->
             <div class="text-center mb-4">
-                <h1 class="h2 text-danger fw-bold mb-3">
-                    <i class="bi bi-exclamation-triangle me-2"></i>
-                    Conferma Eliminazione
+                <h1 class="h2 text-warning fw-bold mb-3">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Conferma Completamento Progetto
                 </h1>
                 <p class="text-muted">
-                    Stai per eliminare definitivamente il progetto. Questa azione non può essere annullata.
+                    Stai per contrassegnare il progetto come completato. Una volta completato, il progetto non potrà più essere modificato.
                 </p>
             </div>
 
-            <!-- Card del progetto da eliminare -->
-            <div class="card border-danger mb-4">
-                <div class="card-header bg-danger text-white">
+            <!-- Card del progetto da completare -->
+            <div class="card border-warning mb-4">
+                <div class="card-header bg-warning text-dark">
                     <h5 class="card-title mb-0">
-                        <i class="bi bi-folder-x me-2"></i>
-                        Progetto da Eliminare
+                        <i class="bi bi-folder-check me-2"></i>
+                        Progetto da Completare
                     </h5>
                 </div>
                 <div class="card-body">
@@ -38,10 +38,11 @@
                         </div>
                         @endif
                         <div class="col-md-{{ $project->image_path ? '8' : '12' }}">
-                            <h4 class="text-danger fw-bold">{{ $project->title }}</h4>
+                            <h4 class="text-warning fw-bold">{{ $project->title }}</h4>
                             <div class="mb-2">
                                 <span class="badge bg-primary me-2">{{ $project->category->tag ?? 'N/A' }}</span>
                                 <span class="badge bg-success">{{ $project->association->name ?? 'N/A' }}</span>
+                                <span class="badge bg-secondary">{{ ucfirst($project->status) }}</span>
                             </div>
                             <p class="text-muted mb-1">
                                 <i class="bi bi-geo-alt me-1"></i>
@@ -69,28 +70,46 @@
 
             <!-- Azioni -->
             <div class="row g-3">
-                <!-- Elimina -->
+                <!-- Completa -->
                 <div class="col-md-6">
-                    <div class="card border-danger h-100">
-                        <div class="card-header bg-light border-danger">
-                            <h6 class="text-danger fw-bold mb-0">
-                                <i class="bi bi-trash3 me-2"></i>
-                                Elimina Definitivamente
+                    <div class="card border-warning h-100">
+                        <div class="card-header bg-light border-warning">
+                            <h6 class="text-warning fw-bold mb-0">
+                                <i class="bi bi-check-circle me-2"></i>
+                                Contrassegna come Completato
                             </h6>
                         </div>
                         <div class="card-body text-center">
                             <div class="mb-3">
-                                <i class="bi bi-exclamation-circle text-danger" style="font-size: 2rem;"></i>
+                                <i class="bi bi-lock text-warning" style="font-size: 2rem;"></i>
                             </div>
                             <p class="text-muted mb-3">
-                                Il progetto <strong>sarà rimosso permanentemente</strong> dal database insieme a tutti i dati associati.
+                                Il progetto <strong>sarà contrassegnato come completato</strong> e non potrà più essere modificato.
                             </p>
-                            <form method="post" action="{{ route('project.destroy', ['id' => $project->id]) }}">
-                                @method('DELETE')
+                            <form method="post" action="{{ route('project.complete', ['id' => $project->id]) }}">
                                 @csrf
-                                <button type="submit" class="btn btn-danger btn-lg w-100">
-                                    <i class="bi bi-trash3 me-2"></i>
-                                    Elimina Progetto
+                                @method('PUT')
+                                <!-- Mantieni tutti i dati del form originale tranne il file -->
+                                @foreach($formData as $key => $value)
+                                    @if($key === 'status')
+                                        <input type="hidden" name="{{ $key }}" value="completed">
+                                    @elseif($key !== 'image_path')
+                                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                                    @endif
+                                @endforeach
+                                
+                                @if(isset($formData['image_path']))
+                                    <!-- Nota per l'immagine -->
+                                    <input type="hidden" name="has_new_image" value="1">
+                                    <p class="text-muted small mb-3">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Nota: Se hai caricato una nuova immagine, dovrai ricaricarla dopo la conferma.
+                                    </p>
+                                @endif
+                                
+                                <button type="submit" class="btn btn-warning btn-lg w-100">
+                                    <i class="bi bi-check-circle me-2"></i>
+                                    Completa Progetto
                                 </button>
                             </form>
                         </div>
@@ -103,19 +122,19 @@
                         <div class="card-header bg-light border-secondary">
                             <h6 class="text-secondary fw-bold mb-0">
                                 <i class="bi bi-arrow-left me-2"></i>
-                                Annulla Operazione
+                                Continua a Modificare
                             </h6>
                         </div>
                         <div class="card-body text-center">
                             <div class="mb-3">
-                                <i class="bi bi-shield-check text-success" style="font-size: 2rem;"></i>
+                                <i class="bi bi-pencil-square text-primary" style="font-size: 2rem;"></i>
                             </div>
                             <p class="text-muted mb-3">
-                                Il progetto <strong>rimarrà invariato</strong> e non verrà eliminato dal database.
+                                Il progetto <strong>rimarrà modificabile</strong> e potrai continuare ad aggiornarlo.
                             </p>
-                            <a href="{{ route('project.index') }}" class="btn btn-secondary btn-lg w-100">
+                            <a href="{{ route('project.edit', ['id' => $project->id]) }}" class="btn btn-secondary btn-lg w-100">
                                 <i class="bi bi-arrow-left me-2"></i>
-                                Torna ai Progetti
+                                Torna alla Modifica
                             </a>
                         </div>
                     </div>
@@ -129,11 +148,12 @@
                         <i class="bi bi-exclamation-triangle-fill text-warning"></i>
                     </div>
                     <div class="flex-grow-1 ms-3">
-                        <h6 class="alert-heading">Attenzione!</h6>
-                        <p class="mb-0">
-                            Una volta eliminato, il progetto non potrà essere recuperato. 
-                            Assicurati di aver fatto un backup se necessario.
-                        </p>
+                        <h6 class="alert-heading">Importante!</h6>
+                        <ul class="mb-0">
+                            <li>Una volta completato, il progetto non potrà più essere modificato</li>
+                            <li>Il progetto rimarrà visibile ma in sola lettura</li>
+                            <li>Assicurati che tutti i dati siano corretti prima di procedere</li>
+                        </ul>
                     </div>
                 </div>
             </div>

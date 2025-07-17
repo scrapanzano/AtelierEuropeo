@@ -57,7 +57,7 @@
         @endif
     @endif
     <div class="position-relative">
-        <img src="{{ asset($project->image_path) }}" class="card-img-top rounded-top-4 card-img-bright" alt="...">
+        <img src="{{ $project->image_url }}" class="card-img-top rounded-top-4 card-img-bright" alt="...">
         <div class="card-img-gradient rounded-top-4"></div>
         <span class="badge badge-bottom-left fw-bold">
             <i class="bi bi-calendar-event me-1"></i>
@@ -92,12 +92,20 @@
                         <i class="bi bi-three-dots-vertical"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                        <li><a class="dropdown-item py-2 text-primary"
-                                href="{{ route('project.edit', ['id' => $project->id]) }}"><i
-                                    class="bi bi-pen-fill me-2"></i> Modifica</a></li>
-                        <li>
-                            <hr class="dropdown-divider my-1">
-                        </li>
+                        @if($project->status !== 'completed')
+                            <li><a class="dropdown-item py-2 text-primary"
+                                    href="{{ route('project.edit', ['id' => $project->id]) }}"><i
+                                        class="bi bi-pen-fill me-2"></i> Modifica</a></li>
+                            <li>
+                                <hr class="dropdown-divider my-1">
+                            </li>
+                        @else
+                            <li><span class="dropdown-item py-2 text-muted"><i
+                                        class="bi bi-check-circle me-2"></i> Progetto Completato</span></li>
+                            <li>
+                                <hr class="dropdown-divider my-1">
+                            </li>
+                        @endif
                         <li><a class="dropdown-item py-2 text-danger"
                                 href="{{ route('project.destroy.confirm', ['id' => $project->id]) }}"><i
                                 class="bi bi-trash-fill me-2"></i> Elimina</a>

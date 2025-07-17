@@ -40,6 +40,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'registered_user',
         ]);
 
         event(new Registered($user));
@@ -47,6 +48,6 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         // return redirect(route('dashboard', absolute: false));
-        return Redirect::to(route('home'));
+        return Redirect::to(route('home'))->with('success', 'Benvenuto! Registrazione completata con successo.');
     }
 }

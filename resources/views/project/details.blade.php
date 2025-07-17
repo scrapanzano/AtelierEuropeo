@@ -33,7 +33,7 @@
 @section('body')
     <div class="container px-2 px-md-4 pb-5">
         <div class="hero-section d-flex align-items-center justify-content-center mb-4 px-2"
-            style="background-image: url('{{ asset($project->image_path) }}'); min-height: 220px;">
+            style="background-image: url('{{ $project->image_url }}'); min-height: 220px;">
             <div class="hero-overlay"></div>
             <div class="container position-relative text-center text-white py-4 py-md-5">
                 <h1 class="section-title">{{ $project->title }}</h1>
@@ -47,9 +47,15 @@
                 @if (auth()->check())
                     @if (auth()->user()->role === 'admin')
                         {{-- Admin: pulsante per modificare il progetto --}}
-                        <a href="{{ route('project.edit', ['id' => $project->id]) }}" class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2">
-                            <i class="bi bi-pen me-2"></i> Modifica
-                        </a>
+                        @if($project->status === 'completed')
+                            <span class="btn btn-outline-secondary btn-rounded d-inline-flex align-items-center px-3 py-2" disabled>
+                                <i class="bi bi-check-circle me-2"></i> Completato
+                            </span>
+                        @else
+                            <a href="{{ route('project.edit', ['id' => $project->id]) }}" class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2">
+                                <i class="bi bi-pen me-2"></i> Modifica
+                            </a>
+                        @endif
                     @else
                         {{-- Utente registrato: pulsante salva nei preferiti --}}
                         <button type="button" class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2" onclick="addToFavorites({{ $project->id }})">

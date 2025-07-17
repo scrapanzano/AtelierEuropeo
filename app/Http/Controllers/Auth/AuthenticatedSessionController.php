@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\DataLayer;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -31,7 +33,7 @@ class AuthenticatedSessionController extends Controller
 
         // return redirect()->intended(route('dashboard', absolute: false));
 
-        return Redirect::to(route('home'));
+        return Redirect::to(route('home'))->with('success', 'Login effettuato con successo. Benvenuto!');
     }
 
     /**
@@ -45,6 +47,20 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/')->with('success', 'Logout effettuato con successo. A presto!');
     }
+
+    public function ajaxCheckForEmail(Request $request)
+    {
+        $dl = new DataLayer();
+        
+        if($dl->findUserByEmail($request->input('email')))
+        {
+            $response = array('found'=>true);
+        } else {
+            $response = array('found'=>false);
+        }
+        return response()->json($response);
+    }
+ 
 }

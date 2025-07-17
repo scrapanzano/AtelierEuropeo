@@ -13,6 +13,21 @@
         </div>
     </section>
 
+    <!-- Messaggio di successo -->
+    @if (session('success'))
+        <div class="container py-3">
+            <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <div>
+                        <strong>Perfetto!</strong> {{ session('success') }}
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
+
     <!-- Chi siamo -->
     <section>
         <div class="container py-5 text-center">

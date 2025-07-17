@@ -13,7 +13,7 @@ class Project extends Model
 
     protected $fillable = [
         'title',
-        'author_id',
+        'user_id',
         'category_id',
         'association_id',
         'image_path',
@@ -29,9 +29,32 @@ class Project extends Model
         'travel_conditions',
     ];
 
+    /**
+     * Get the correct image URL for this project
+     */
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image_path) {
+            return asset('img/projects/default.png'); // Fallback di default
+        }
+
+        // Se inizia con http, è un URL esterno (es. da faker)
+        if (str_starts_with($this->image_path, 'http')) {
+            return $this->image_path;
+        }
+
+        // Se inizia con img/, è un path pubblico (es. immagini di default)
+        if (str_starts_with($this->image_path, 'img/')) {
+            return asset($this->image_path);
+        }
+
+        // Altrimenti è un file di storage (upload)
+        return asset('storage/' . $this->image_path);
+    }
+
     public function author()
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function category()

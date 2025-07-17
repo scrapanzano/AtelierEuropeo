@@ -21,7 +21,7 @@ class ProjectFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(3),
-            'author_id' => User::factory(),
+            'user_id' => User::factory(),
             'category_id' => Category::factory(),
             'association_id' => Association::factory(),
             'image_path' => $this->faker->imageUrl(640, 480, 'projects', true),

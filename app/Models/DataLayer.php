@@ -71,6 +71,15 @@ class DataLayer {
                          ->inRandomOrder()
                          ->limit($limit)
                          ->get();
+    } 
+
+    public function findUserByemail($email) {
+        $users = User::where('email', $email)->get();
+        
+        if (count($users) == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
-  
 }

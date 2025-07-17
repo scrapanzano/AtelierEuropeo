@@ -35,13 +35,6 @@ Route::get('/project', [ProjectController::class, 'index'])
     ->middleware('checkProjectAccess')
     ->name('project.index');
 
-// Progetti - altre route
-Route::get('/project/{project}', [ProjectController::class, 'show'])->name('project.show');
-
-Route::middleware(['auth', 'isRegisteredUser'])->group(function () {
-    
-});
-
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/project/create', [ProjectController::class, 'create'])->name('project.create');
     Route::post('/project', [ProjectController::class, 'store'])->name('project.store');
@@ -49,4 +42,11 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::put('/project/{id}', [ProjectController::class, 'update'])->name('project.update');
     Route::delete('/project/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
     Route::get('/project/{id}/destroy/confirm', [ProjectController::class, 'confirmDestroy'])->name('project.destroy.confirm');
+    Route::get('/project/{id}/complete/confirm', [ProjectController::class, 'confirmCompletion'])->name('project.confirm.completion');
+    Route::put('/project/{id}/complete', [ProjectController::class, 'complete'])->name('project.complete');
+    Route::post('/project/validate', [ProjectController::class, 'validateAjax'])->name('project.validate');
+    Route::post('/project/check-title', [ProjectController::class, 'checkTitleUnique'])->name('project.checkTitle');
 });
+
+// Progetti - altre route 
+Route::get('/project/{project}', [ProjectController::class, 'show'])->name('project.show');
