@@ -1,5 +1,7 @@
 @extends('layouts.master')
 
+@section('title', 'AE - Pagina Non Trovata')
+
 @section('breadcrumb')
     <div class="container d-flex justify-content-start pt-4">
         <nav aria-label="breadcrumb" class="w-100">
@@ -24,9 +26,9 @@
                             removed.</p>
                         <p><a class="btn btn-danger" href="{{ route('home') }}"><i class="bi bi-box-arrow-left"></i> Back to
                                 home!</a></p>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection

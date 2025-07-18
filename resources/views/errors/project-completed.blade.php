@@ -26,18 +26,18 @@
                     <div class="alert alert-info border-0 rounded-3 mb-4">
                         <h5 class="alert-heading mb-2">
                             <i class="bi bi-info-circle me-2"></i>
-                            {{ $project->title }}
-                        </h5>
-                        <p class="mb-1">
-                            <strong>Stato:</strong> 
+                                    {{ $project->title }}
+                                </h5>
+                                        <p class="mb-1">
+                                            <strong>Stato:</strong> 
                             <span class="badge bg-success">Completato</span>
-                        </p>
-                        @if($project->end_date)
-                        <p class="mb-0">
-                            <strong>Data di completamento:</strong> 
-                            {{ \Carbon\Carbon::parse($project->end_date)->format('d/m/Y') }}
-                        </p>
-                        @endif
+                                        </p>
+                                    @if($project->end_date)
+                                        <p class="mb-0">
+                                            <strong>Data di completamento:</strong> 
+                                                {{ \Carbon\Carbon::parse($project->end_date)->format('d/m/Y') }}
+                                        </p>
+                                    @endif
                     </div>
                     @endif
                     

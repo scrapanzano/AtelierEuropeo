@@ -31,8 +31,8 @@
                     <div class="row align-items-center">
                         @if($project->image_path)
                         <div class="col-md-4 text-center mb-3 mb-md-0">
-                            <img src="{{ $project->image_url }}" 
-                                 alt="Immagine progetto" 
+                                <img src="{{ $project->image_url }}" 
+                                     alt="Immagine progetto" 
                                  class="img-fluid rounded shadow-sm" 
                                  style="max-height: 120px;">
                         </div>
@@ -46,18 +46,18 @@
                             <p class="text-muted mb-1">
                                 <i class="bi bi-geo-alt me-1"></i>
                                 {{ $project->location }}
-                            </p>
+                                    </p>
                             <p class="text-muted mb-1">
                                 <i class="bi bi-people me-1"></i>
                                 {{ $project->requested_people }} persone richieste
-                            </p>
+                                    </p>
                             <p class="text-muted mb-0">
                                 <i class="bi bi-calendar-event me-1"></i>
                                 {{ \Carbon\Carbon::parse($project->start_date)->format('d/m/Y') }} - 
-                                {{ \Carbon\Carbon::parse($project->end_date)->format('d/m/Y') }}
-                            </p>
-                        </div>
-                    </div>
+                                        {{ \Carbon\Carbon::parse($project->end_date)->format('d/m/Y') }}
+                                    </p>
+                                </div>
+                            </div>
                     
                     @if($project->sum_description)
                     <div class="mt-3 pt-3 border-top">
@@ -114,13 +114,13 @@
                                 Il progetto <strong>rimarrà invariato</strong> e non verrà eliminato dal database.
                             </p>
                             <a href="{{ route('project.index') }}" class="btn btn-secondary btn-lg w-100">
-                                <i class="bi bi-arrow-left me-2"></i>
-                                Torna ai Progetti
-                            </a>
+                                    <i class="bi bi-arrow-left me-2"></i>
+                                    Torna ai Progetti
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
             <!-- Avviso importante -->
             <div class="alert alert-warning border-0 mt-4">

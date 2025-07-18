@@ -1,4 +1,6 @@
-@extends('layouts.master') <!-- title - active_home - active_MyLibrary - breadcrumb - body -->
+@extends('layouts.master')
+
+@section('title', 'AE - Funzionalità Non Implementata')
 
 @section('breadcrumb')
 <li class="breadcrumb-item" aria-current="page"><a href="{{ route('home') }}">Home</a></li>
@@ -13,7 +15,7 @@
             <div class="card border-danger">
                 <div class='card-header'>
                     <b>Not implemented:</b> this functionality has not been implemented yet
-                </div>
+                    </div>
                 <div class='card-body'>
                     <p><img class="img-thumbnail" src="{{ url('/') }}/img/comingSoon.png"></p>
                     <p><a class="btn btn-danger" href="{{ url()->previous() }}"><i class="bi bi-box-arrow-left"></i> Go Back!</a></p>

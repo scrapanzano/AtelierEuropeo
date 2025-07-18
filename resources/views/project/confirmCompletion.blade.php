@@ -4,6 +4,19 @@
 
 @section('active_progetti', 'active')
 
+@section('breadcrumb')
+<div class="container d-flex justify-content-start pt-4">
+    <nav aria-label="breadcrumb" class="w-100">
+        <ol class="breadcrumb bg-light bg-opacity-75 p-3 rounded-4 mb-4 align-items-center">
+            <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('project.index') }}" class="text-decoration-none">Progetti</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('project.edit', $project->id) }}" class="text-decoration-none">Modifica Progetto</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Conferma Completamento</li>
+        </ol>
+    </nav>
+</div>
+@endsection
+
 @section('body')
 <div class="container py-5">
     <div class="row justify-content-center">
@@ -31,8 +44,8 @@
                     <div class="row align-items-center">
                         @if($project->image_path)
                         <div class="col-md-4 text-center mb-3 mb-md-0">
-                            <img src="{{ $project->image_url }}" 
-                                 alt="Immagine progetto" 
+                                <img src="{{ $project->image_url }}" 
+                                     alt="Immagine progetto" 
                                  class="img-fluid rounded shadow-sm" 
                                  style="max-height: 120px;">
                         </div>
@@ -47,16 +60,16 @@
                             <p class="text-muted mb-1">
                                 <i class="bi bi-geo-alt me-1"></i>
                                 {{ $project->location }}
-                            </p>
+                                    </p>
                             <p class="text-muted mb-1">
                                 <i class="bi bi-people me-1"></i>
                                 {{ $project->requested_people }} persone richieste
-                            </p>
+                                    </p>
                             <p class="text-muted mb-0">
                                 <i class="bi bi-calendar-event me-1"></i>
                                 {{ \Carbon\Carbon::parse($project->start_date)->format('d/m/Y') }} - 
-                                {{ \Carbon\Carbon::parse($project->end_date)->format('d/m/Y') }}
-                            </p>
+                                        {{ \Carbon\Carbon::parse($project->end_date)->format('d/m/Y') }}
+                                    </p>
                         </div>
                     </div>
                     
@@ -102,7 +115,7 @@
                                     <!-- Nota per l'immagine -->
                                     <input type="hidden" name="has_new_image" value="1">
                                     <p class="text-muted small mb-3">
-                                        <i class="bi bi-info-circle me-1"></i>
+                                            <i class="bi bi-info-circle me-1"></i>
                                         Nota: Se hai caricato una nuova immagine, dovrai ricaricarla dopo la conferma.
                                     </p>
                                 @endif
@@ -133,9 +146,9 @@
                                 Il progetto <strong>rimarrà modificabile</strong> e potrai continuare ad aggiornarlo.
                             </p>
                             <a href="{{ route('project.edit', ['id' => $project->id]) }}" class="btn btn-secondary btn-lg w-100">
-                                <i class="bi bi-arrow-left me-2"></i>
-                                Torna alla Modifica
-                            </a>
+                                    <i class="bi bi-arrow-left me-2"></i>
+                                    Torna alla Modifica
+                                </a>
                         </div>
                     </div>
                 </div>

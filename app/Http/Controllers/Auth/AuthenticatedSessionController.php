@@ -14,26 +14,33 @@ use Illuminate\Support\Facades\Redirect;
 
 class AuthenticatedSessionController extends Controller
 {
+        
     /**
      * Display the login view.
      */
     public function create(): View
     {
+        // Memorizza l'URL di provenienza se non è già la pagina di login
+        if (!request()->session()->has('url.intended') && url()->previous() !== url()->current()) {
+            request()->session()->put('url.intended', url()->previous());
+        }
+        
         return view('auth.authLogin');
     }
-
+    
     /**
      * Handle an incoming authentication request.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
+    
         $request->session()->regenerate();
-
-        // return redirect()->intended(route('dashboard', absolute: false));
-
-        return Redirect::to(route('home'))->with('success', 'Login effettuato con successo. Benvenuto!');
+    
+        // Ottiene l'URL intended dalla sessione
+        $intendedUrl = $request->session()->pull('url.intended', '/');
+        
+        return redirect($intendedUrl)->with('success', 'Login effettuato con successo. Benvenuto!');
     }
 
     /**
@@ -53,14 +60,12 @@ class AuthenticatedSessionController extends Controller
     public function ajaxCheckForEmail(Request $request)
     {
         $dl = new DataLayer();
-        
-        if($dl->findUserByEmail($request->input('email')))
-        {
-            $response = array('found'=>true);
+
+        if ($dl->findUserByEmail($request->input('email'))) {
+            $response = array('found' => true);
         } else {
-            $response = array('found'=>false);
+            $response = array('found' => false);
         }
         return response()->json($response);
     }
- 
 }
