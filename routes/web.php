@@ -7,63 +7,128 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AdminApplicationController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
-// Route::middleware('auth')->group(function () {
-//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-// });
-
+// Include authentication routes
 require __DIR__.'/auth.php';
 
-// Home
+/*
+|--------------------------------------------------------------------------
+| Public Routes (Guest & Authenticated)
+|--------------------------------------------------------------------------
+*/
+
+// Homepage
 Route::get('/', [FrontController::class, 'getHome'])->name('home');
 
-// About
+// Static pages
 Route::get('/about', [FrontController::class, 'getAbout'])->name('about');
 
-// Portfolio progetti (progetti chiusi con testimonianze)
+// Portfolio (completed projects with testimonials)
 Route::get('/portfolio', [ProjectController::class, 'portfolio'])->name('project.portfolio');
 
-// Progetti con controllo accesso per status
+// Project listing (with access control middleware)
 Route::get('/project', [ProjectController::class, 'index'])
     ->middleware('checkProjectAccess')
     ->name('project.index');
 
-Route::middleware(['auth', 'isAdmin'])->group(function () {
-    Route::get('/project/create', [ProjectController::class, 'create'])->name('project.create');
-    Route::post('/project', [ProjectController::class, 'store'])->name('project.store');
-    Route::get('/project/{id}/edit', [ProjectController::class, 'edit'])->name('project.edit');
-    Route::put('/project/{id}', [ProjectController::class, 'update'])->name('project.update');
-    Route::delete('/project/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
-    Route::get('/project/{id}/destroy/confirm', [ProjectController::class, 'confirmDestroy'])->name('project.destroy.confirm');
-    Route::get('/project/{id}/complete/confirm', [ProjectController::class, 'confirmCompletion'])->name('project.confirm.completion');
-    Route::put('/project/{id}/complete', [ProjectController::class, 'complete'])->name('project.complete');
-    Route::post('/project/validate', [ProjectController::class, 'validateAjax'])->name('project.validate');
-    Route::post('/project/check-title', [ProjectController::class, 'checkTitleUnique'])->name('project.checkTitle');
-    
-    // Route per amministrazione candidature
-    Route::get('/admin/project/{projectId}/applications', [AdminApplicationController::class, 'index'])->name('admin.applications.index');
-    Route::get('/admin/applications/{application}', [AdminApplicationController::class, 'show'])->name('admin.applications.show');
-    Route::patch('/admin/applications/{application}/update-status', [AdminApplicationController::class, 'updateStatus'])->name('admin.applications.update-status');
-    Route::patch('/admin/applications/{application}/approve', [AdminApplicationController::class, 'approve'])->name('admin.applications.approve');
-    Route::patch('/admin/applications/{application}/reject', [AdminApplicationController::class, 'reject'])->name('admin.applications.reject');
-});
-
-// Progetti - altre route 
+// Single project view (public)
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('project.show');
 
-// Route per le candidature
+/*
+|--------------------------------------------------------------------------
+| Authenticated User Routes
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('auth')->group(function () {
-    Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
-    Route::get('/project/{id}/apply', [ApplicationController::class, 'create'])->name('applications.create');
-    Route::post('/project/{id}/apply', [ApplicationController::class, 'store'])->name('applications.store');
-    Route::get('/applications/{application}', [ApplicationController::class, 'show'])->name('applications.show');
+    
+    /*
+    |--------------------------------------------------------------------------
+    | User Profile Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Applications Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('applications')->name('applications.')->group(function () {
+        Route::get('/', [ApplicationController::class, 'index'])->name('index');
+        Route::get('/{application}', [ApplicationController::class, 'show'])->name('show');
+    });
+
+    // Project application routes (nested under project)
+    Route::prefix('project/{id}')->name('applications.')->group(function () {
+        Route::get('/apply', [ApplicationController::class, 'create'])->name('create');
+        Route::post('/apply', [ApplicationController::class, 'store'])->name('store');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin Only Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'isAdmin'])->group(function () {
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Project Management Routes (Admin)
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('project')->name('project.')->group(function () {
+        // Project CRUD operations
+        Route::get('/create', [ProjectController::class, 'create'])->name('create');
+        Route::post('/', [ProjectController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [ProjectController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [ProjectController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ProjectController::class, 'destroy'])->name('destroy');
+        
+        // Project status management
+        Route::get('/{id}/destroy/confirm', [ProjectController::class, 'confirmDestroy'])->name('destroy.confirm');
+        Route::get('/{id}/complete/confirm', [ProjectController::class, 'confirmCompletion'])->name('confirm.completion');
+        Route::put('/{id}/complete', [ProjectController::class, 'complete'])->name('complete');
+        
+        // AJAX validation routes
+        Route::post('/validate', [ProjectController::class, 'validateAjax'])->name('validate');
+        Route::post('/check-title', [ProjectController::class, 'checkTitleUnique'])->name('checkTitle');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Management Routes (Admin)
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('admin')->name('admin.')->group(function () {
+        
+        // Project applications management
+        Route::prefix('project/{projectId}')->group(function () {
+            Route::get('/applications', [AdminApplicationController::class, 'index'])->name('applications.index');
+        });
+        
+        // Individual application management
+        Route::prefix('applications/{application}')->name('applications.')->group(function () {
+            Route::get('/', [AdminApplicationController::class, 'show'])->name('show');
+            Route::patch('/update-status', [AdminApplicationController::class, 'updateStatus'])->name('update-status');
+            Route::patch('/approve', [AdminApplicationController::class, 'approve'])->name('approve');
+            Route::patch('/reject', [AdminApplicationController::class, 'reject'])->name('reject');
+        });
+    });
 });

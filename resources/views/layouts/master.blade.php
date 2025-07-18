@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ url('/') }}/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-        
+
     <!-- JS -->
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -70,19 +70,78 @@
                     </li>
                 </ul>
                 @if (auth()->check())
-                    <div class="d-flex gap-2 align-items-center">
-                        <span class="navbar-text text-light me-2">
-                            Ciao, <strong>{{ auth()->user()->name }}</strong>!
-                        </span>
-                        @if (auth()->user()->role !== 'admin')
-                            <a href="{{ route('applications.index') }}" class="btn btn-outline-light btn-sm">
-                                <i class="bi bi-file-earmark-text me-1"></i>Le mie candidature
-                            </a>
-                        @endif
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-danger btn-sm">Esci</button>
-                        </form>
+                    <!-- Dropdown utente -->
+                    <div class="dropdown">
+                        <button class="btn btn-dark dropdown-toggle d-flex align-items-center gap-2"
+                            type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="d-flex align-items-center gap-2">
+                                <!-- Icona utente -->
+                                <i class="bi bi-person-fill fs-5"></i>
+                                <!-- Nome utente (nascosto su mobile) -->
+                                <span class="d-none d-md-inline">{{ auth()->user()->name }}</span>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <h6 class="dropdown-header">
+                                    <i class="bi bi-person me-1"></i>
+                                    {{ auth()->user()->name }}
+                                </h6>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <!-- Profilo utente -->
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.edit') }}">
+                                    <i class="bi bi-person-gear me-2"></i>
+                                    Il Mio Profilo
+                                </a>
+                            </li>
+
+                            @if (auth()->user()->role !== 'admin')
+                                <!-- Le mie candidature (solo per utenti non admin) -->
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center"
+                                        href="{{ route('applications.index') }}">
+                                        <i class="bi bi-file-earmark-text me-2"></i>
+                                        Le Mie Candidature
+                                    </a>
+                                </li>
+                            @else
+                                <!-- Dashboard admin (solo per admin) -->
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center"
+                                        href="{{ route('project.index') }}">
+                                        <i class="bi bi-speedometer2 me-2"></i>
+                                        Dashboard Admin
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center"
+                                        href="{{ route('project.create') }}">
+                                        <i class="bi bi-plus-circle me-2"></i>
+                                        Nuovo Progetto
+                                    </a>
+                                </li>
+                            @endif
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                            <!-- Logout -->
+                            <li>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item d-flex align-items-center text-danger">
+                                        <i class="bi bi-box-arrow-right me-2"></i>
+                                        Esci
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
                 @else
                     <div class="d-flex gap-2">

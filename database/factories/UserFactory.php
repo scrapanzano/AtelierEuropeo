@@ -42,4 +42,32 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+    
+    /**
+     * Create an admin user.
+     */
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'admin',
+            'name' => fake()->name() . ' (Admin)',
+        ]);
+    }
+    
+    /**
+     * Create a user with Italian-sounding names.
+     */
+    public function italian(): static
+    {
+        $italianNames = [
+            'Marco Rossi', 'Giulia Bianchi', 'Francesco Ferrari', 'Chiara Romano',
+            'Alessandro Galli', 'Francesca Conti', 'Matteo Ricci', 'Elena Marino',
+            'Davide Costa', 'Silvia Giordano', 'Simone Mancini', 'Valentina Rizzo',
+            'Andrea Lombardi', 'Martina Moretti', 'Luca Bruno', 'Sara Greco'
+        ];
+        
+        return $this->state(fn (array $attributes) => [
+            'name' => fake()->randomElement($italianNames),
+        ]);
+    }
 }

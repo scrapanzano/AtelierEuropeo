@@ -233,7 +233,7 @@
                     @if($hasApplied)
                         <div class="alert alert-info mb-4">
                             <i class="bi bi-check-circle me-2"></i>
-                            Ti sei già candidato per questo progetto. Puoi controllare lo stato della tua candidatura nella sezione delle tue candidature.
+                            Ti sei già candidato per questo progetto. Puoi controllare lo stato della tua candidatura nella sezione delle <a href="{{ route('applications.index') }}">tue candidature</a>.
                         </div>
                     @else
                         <p class="lead mb-4">Compila il form con i tuoi dati e carica il tuo CV per candidarti!</p>
