@@ -13,17 +13,17 @@
         </h1>
         
         <div class="row mb-4 g-2 align-items-center py-5">
-            <div class="col-12">
-                <h3 class="fw-bold mb-0 fs-2 fs-lg-1 text-center">Progetti Completati</h3>
-                <p class="text-center text-muted">Esplora i progetti che hanno già lasciato il segno</p>
+            <div class="col-8 col-md-6">
+                <h3 class="fw-bold mb-0 fs-2 fs-lg-1">Portfolio Progetti</h3>
             </div>
         </div>
 
         @if($completedProjects->count() > 0)
-            <!-- Container principale: griglia responsive -->
-            <div class="row g-4">
+            <!-- Container principale: row-cols per griglia su desktop, flex-nowrap per scroll su mobile -->
+            <div class="row flex-lg-wrap flex-nowrap overflow-auto pb-3 gx-4">
                 @foreach ($completedProjects as $project)
-                    <div class="col-12 col-md-6 col-lg-4">
+                    <!-- Card container: dimensioni reattive e flex-shrink-0 per scroll -->
+                    <div class="col-6 col-sm-7 col-md-5 col-lg-4 mb-4 flex-shrink-0 flex-lg-shrink-1">
                         <x-project-card 
                             :project="$project" 
                             :showAdminOptions="auth()->check() && auth()->user()->role === 'admin'" 
@@ -46,17 +46,16 @@
                 </a>
             </div>
         @endif
-
+    </div>        
         <!-- Call to action -->
-        <div class="text-center mt-5 pt-5">
-            <div class="bg-light rounded-4 p-4 p-md-5">
+    <div class="container-fluid">
+            <div class="text-center bg-light p-4 p-md-5">
                 <h3 class="fw-bold mb-3">Vuoi essere il prossimo?</h3>
                 <p class="text-muted mb-4">Unisciti ai nostri progetti e vivi un'esperienza unica che cambierà la tua vita.</p>
                 <a href="{{ route('project.index') }}" class="btn btn-primary btn-lg">
                     <i class="bi bi-rocket-takeoff me-2"></i>Scopri i Progetti Disponibili
                 </a>
             </div>
-        </div>
     </div>
 
 @endsection

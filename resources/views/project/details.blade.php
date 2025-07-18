@@ -219,7 +219,7 @@
                                 <div class="modal-footer">
                                     <a href="{{ route('login') }}" class="btn btn-primary">Accedi</a>
                                     <a href="{{ route('register') }}" class="btn btn-secondary">Registrati</a>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
                                 </div>
                             </div>
                         </div>

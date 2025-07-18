@@ -11,7 +11,7 @@
         $category = $project->category;
         $badgeColor = $categoryColors[$category->tag];
     @endphp
-    <span class="badge {{ $badgeColor }} fw-bold position-absolute top-0 start-0"
+    <span class="badge {{ $badgeColor }} fw-bold position-absolute top-0 start-0 shadow-sm"
         style="border-radius: 0; border-top-left-radius: 0.75rem; border-bottom-right-radius: 0.75rem; z-index: 1; padding: 0.5rem 0.75rem; font-size: 1rem;">{{ $category->tag }}</span>
 
     {{-- Icona cuore per utenti non admin --}}

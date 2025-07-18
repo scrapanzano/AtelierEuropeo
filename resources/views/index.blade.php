@@ -38,7 +38,7 @@
                 offerte dall'Unione Europea.
             </h1>
 
-            <div class="card-group pt-5">
+            <div class="card-group mt-3 pt-5">
                 <div class="card border-0 shadow-sm me-3">
                     <div class="card-body">
                         <h2 class="card-title text-primary fw-bold">10+</h2>
@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            <div class="container py-5">
+            <div class="container pt-5">
                 <a href="{{ route('about') }}" class="btn btn-lg btn-primary btn-rounded">Scopri chi siamo</a>
             </div>
         </div>
@@ -126,24 +126,6 @@
                 <h1 class="section-subtitle">Le testimonianze di chi ha vissuto l'Europa con Atelier Europeo.</h1>
             </div>
             
-            {{-- @if($randomTestimonials && $randomTestimonials->count() > 0)
-                <div class="row g-4 mb-5">
-                    @foreach($randomTestimonials as $testimonial)
-                        <div class="col-12 col-lg-4">
-                            <div class="card border-0 shadow-sm h-100">
-                                <div class="card-body text-center p-4">
-                                    <i class="bi bi-quote display-4 mb-3"></i>
-                                    <p class="card-text mb-3">{{ $testimonial->content }}</p>
-                                    <div class="border-top pt-3">
-                                        <h6 class="fw-bold mb-1">{{ $testimonial->author->name }}</h6>
-                                        <small class="text-muted">{{ $testimonial->project->title }}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif --}}
 
             @if($randomTestimonials && $randomTestimonials->count() > 0)
                 <div class="row g-4 mb-5">
