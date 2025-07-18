@@ -6,6 +6,7 @@ use App\Models\DataLayer;
 use App\Http\Requests\ProjectRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProjectController extends Controller
@@ -44,7 +45,7 @@ class ProjectController extends Controller
            
             default:
                 // Solo per il caso 'all' verifichiamo il ruolo per decidere cosa mostrare
-                $isAdmin = auth()->check() && auth()->user()->isAdmin();
+                $isAdmin = Auth::check() && Auth::user()->role === 'admin';
                 if ($isAdmin) {
                     return $dl->listProjects(); // Tutti i progetti
                 } else {

@@ -29,6 +29,12 @@ class Project extends Model
         'travel_conditions',
     ];
 
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'expire_date' => 'date',
+    ];
+
     /**
      * Get the correct image URL for this project
      */

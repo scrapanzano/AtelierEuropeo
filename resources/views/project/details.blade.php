@@ -32,6 +32,31 @@
 
 @section('body')
     <div class="container px-2 px-md-4 pb-5">
+        <!-- Messaggi di sessione -->
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong>Perfetto!</strong> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Attenzione!</strong> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if(session('info'))
+            <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                <strong>Info:</strong> {{ session('info') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="hero-section d-flex align-items-center justify-content-center mb-4 px-2"
             style="background-image: url('{{ $project->image_url }}'); min-height: 220px;">
             <div class="hero-overlay"></div>
@@ -48,14 +73,18 @@
                     @if (auth()->user()->role === 'admin')
                         {{-- Admin: pulsante per modificare il progetto --}}
                         @if($project->status === 'completed')
-                            <span class="btn btn-outline-secondary btn-rounded d-inline-flex align-items-center px-3 py-2" disabled>
+                            <span class="btn btn-outline-secondary btn-rounded d-inline-flex align-items-center px-3 py-2 me-2" disabled>
                                 <i class="bi bi-check-circle me-2"></i> Completato
                             </span>
                         @else
-                            <a href="{{ route('project.edit', ['id' => $project->id]) }}" class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2">
+                            <a href="{{ route('project.edit', ['id' => $project->id]) }}" class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2 me-2">
                                 <i class="bi bi-pen me-2"></i> Modifica
                             </a>
                         @endif
+                        {{-- Admin: pulsante per gestire candidature --}}
+                        <a href="{{ route('admin.applications.index', $project->id) }}" class="btn btn-outline-info btn-rounded d-inline-flex align-items-center px-3 py-2">
+                            <i class="bi bi-person-lines-fill me-2"></i> Candidature
+                        </a>
                     @else
                         {{-- Utente registrato: pulsante salva nei preferiti --}}
                         <button type="button" class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2" onclick="addToFavorites({{ $project->id }})">
@@ -187,17 +216,31 @@
                 {{-- Sezione per amministratori --}}
                 <h1 class="fw-bold py-3 fs-3 fs-md-2">Gestisci questo progetto</h1>
                 <p class="lead mb-4">Visualizza e gestisci le candidature ricevute per questo progetto.</p>
-                <button class="btn btn-success btn-lg btn-rounded px-4 py-2">
+                <a href="{{ route('admin.applications.index', $project->id) }}" class="btn btn-success btn-lg btn-rounded px-4 py-2">
                     <i class="bi bi-people-fill me-2"></i> Gestisci Candidature
-                </button>
+                </a>
             @else
                 {{-- Sezione per utenti normali con progetti attivi --}}
                 <h1 class="fw-bold py-3 fs-3 fs-md-2">Presenta la tua candidatura!</h1>
                 @if (auth()->check())
-                    {{-- Utente registrato: pulsante per candidarsi --}}
-                    <button class="btn btn-primary btn-lg btn-rounded px-4 py-2">
-                        <i class="bi bi-bookmark-plus-fill me-2"></i> Candidati
-                    </button>
+                    {{-- Utente registrato: verifica se si è già candidato --}}
+                    @php
+                        $hasApplied = \App\Models\Application::where('user_id', auth()->id())
+                            ->where('project_id', $project->id)
+                            ->exists();
+                    @endphp
+                    
+                    @if($hasApplied)
+                        <div class="alert alert-info mb-4">
+                            <i class="bi bi-check-circle me-2"></i>
+                            Ti sei già candidato per questo progetto. Puoi controllare lo stato della tua candidatura nella sezione delle tue candidature.
+                        </div>
+                    @else
+                        <p class="lead mb-4">Compila il form con i tuoi dati e carica il tuo CV per candidarti!</p>
+                        <a href="{{ route('applications.create', $project->id) }}" class="btn btn-primary btn-lg btn-rounded px-4 py-2">
+                            <i class="bi bi-bookmark-plus-fill me-2"></i> Candidati ora
+                        </a>
+                    @endif
                 @else
                     {{-- Utente non loggato: mostra modal per autenticazione --}}
                     <button class="btn btn-primary btn-lg btn-rounded px-4 py-2" data-bs-toggle="modal" data-bs-target="#authModalApply">
@@ -228,6 +271,7 @@
             @endif
         </div>
     </div>
+
 @endsection
 
 

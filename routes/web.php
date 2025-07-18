@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\AdminApplicationController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -46,7 +48,22 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::put('/project/{id}/complete', [ProjectController::class, 'complete'])->name('project.complete');
     Route::post('/project/validate', [ProjectController::class, 'validateAjax'])->name('project.validate');
     Route::post('/project/check-title', [ProjectController::class, 'checkTitleUnique'])->name('project.checkTitle');
+    
+    // Route per amministrazione candidature
+    Route::get('/admin/project/{projectId}/applications', [AdminApplicationController::class, 'index'])->name('admin.applications.index');
+    Route::get('/admin/applications/{application}', [AdminApplicationController::class, 'show'])->name('admin.applications.show');
+    Route::patch('/admin/applications/{application}/update-status', [AdminApplicationController::class, 'updateStatus'])->name('admin.applications.update-status');
+    Route::patch('/admin/applications/{application}/approve', [AdminApplicationController::class, 'approve'])->name('admin.applications.approve');
+    Route::patch('/admin/applications/{application}/reject', [AdminApplicationController::class, 'reject'])->name('admin.applications.reject');
 });
 
 // Progetti - altre route 
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('project.show');
+
+// Route per le candidature
+Route::middleware('auth')->group(function () {
+    Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
+    Route::get('/project/{id}/apply', [ApplicationController::class, 'create'])->name('applications.create');
+    Route::post('/project/{id}/apply', [ApplicationController::class, 'store'])->name('applications.store');
+    Route::get('/applications/{application}', [ApplicationController::class, 'show'])->name('applications.show');
+});

@@ -70,10 +70,18 @@
                     </li>
                 </ul>
                 @if (auth()->check())
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 align-items-center">
+                        <span class="navbar-text text-light me-2">
+                            Ciao, <strong>{{ auth()->user()->name }}</strong>!
+                        </span>
+                        @if (auth()->user()->role !== 'admin')
+                            <a href="{{ route('applications.index') }}" class="btn btn-outline-light btn-sm">
+                                <i class="bi bi-file-earmark-text me-1"></i>Le mie candidature
+                            </a>
+                        @endif
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="btn btn-danger">Esci</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Esci</button>
                         </form>
                     </div>
                 @else
