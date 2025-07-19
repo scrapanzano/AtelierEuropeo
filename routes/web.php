@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfilePasswordController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ApplicationController;
@@ -62,6 +63,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('update');
         Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+        
+        // Password update route
+        Route::patch('/password', [ProfilePasswordController::class, 'update'])->name('password.update');
     });
 
     /*

@@ -5,12 +5,49 @@
 @section('body')
     <script>
         $(document).ready(function() {
+            // Validazione in tempo reale per la password
+            $('#password').on('input', function() {
+                validatePasswordRequirements($(this).val());
+            });
+
+            function validatePasswordRequirements(password) {
+                // Controllo lunghezza minima
+                updateRequirement('#req-length', password.length >= 8);
+                
+                // Controllo lettera maiuscola
+                updateRequirement('#req-uppercase', /[A-Z]/.test(password));
+                
+                // Controllo lettera minuscola
+                updateRequirement('#req-lowercase', /[a-z]/.test(password));
+                
+                // Controllo numero
+                updateRequirement('#req-number', /\d/.test(password));
+                
+                // Controllo simbolo
+                updateRequirement('#req-symbol', /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(password));
+            }
+
+            function updateRequirement(selector, isValid) {
+                const element = $(selector);
+                const icon = element.find('i');
+                
+                if (isValid) {
+                    element.removeClass('text-danger').addClass('text-success');
+                    icon.removeClass('bi-x-circle').addClass('bi-check-circle-fill');
+                } else {
+                    element.removeClass('text-success').addClass('text-danger');
+                    icon.removeClass('bi-check-circle-fill').addClass('bi-x-circle');
+                }
+            }
+
             $("#register-form").submit(function(event) {
                 var name = $("input[name='name']").val();
                 var email = $("#register-form input[name='email']").val();
                 var password = $("#register-form input[name='password']").val();
                 var confirmPassword = $("input[name='password_confirmation']").val();
-                var passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+                
+                // Nuova regex più completa per i requisiti aggiornati
+                var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]).{8,}$/;
                 var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 var hasErrors = false;
 
@@ -32,15 +69,15 @@
                     $("#invalid-email").text("Inserisci un indirizzo email valido.");
                 }
 
-                // Verifica password
+                // Verifica password con i nuovi requisiti
                 if (password.trim() === "") {
                     hasErrors = true;
                     $("#invalid-password").text("La password è obbligatoria.");
                 } else if (!passwordRegex.test(password)) {
                     hasErrors = true;
                     $("#invalid-password").text(
-                        "La password deve contenere almeno 8 caratteri, almeno una cifra e almeno un carattere speciale."
-                        );
+                        "La password deve soddisfare tutti i requisiti di sicurezza indicati."
+                    );
                 }
 
                 // Verifica conferma password
@@ -139,6 +176,34 @@
 
                             <div class="mb-3">
                                 <label for="password" class="form-label fw-bold">Password</label>
+                                
+                                <!-- Info requisiti password -->
+                                <div class="alert alert-info small mb-3 border-0 bg-info bg-opacity-10">
+                                    <div class="d-flex align-items-start">
+                                        <i class="bi bi-info-circle me-2 mt-1"></i>
+                                        <div>
+                                            <strong class="d-block mb-2">Requisiti password:</strong>
+                                            <div class="password-requirements">
+                                                <div id="req-length" class="requirement-item text-danger mb-1">
+                                                    <i class="bi bi-x-circle me-2"></i>Almeno 8 caratteri
+                                                </div>
+                                                <div id="req-uppercase" class="requirement-item text-danger mb-1">
+                                                    <i class="bi bi-x-circle me-2"></i>Almeno una lettera maiuscola (A-Z)
+                                                </div>
+                                                <div id="req-lowercase" class="requirement-item text-danger mb-1">
+                                                    <i class="bi bi-x-circle me-2"></i>Almeno una lettera minuscola (a-z)
+                                                </div>
+                                                <div id="req-number" class="requirement-item text-danger mb-1">
+                                                    <i class="bi bi-x-circle me-2"></i>Almeno un numero (0-9)
+                                                </div>
+                                                <div id="req-symbol" class="requirement-item text-danger mb-0">
+                                                    <i class="bi bi-x-circle me-2"></i>Almeno un simbolo (!@#$%^&*)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <input type="password" name="password" id="password"
                                     class="form-control form-control-lg border-0 shadow-sm rounded-3 @error('password') is-invalid @enderror"
                                     placeholder="Crea una password sicura">
@@ -171,4 +236,24 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .requirement-item {
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+        
+        .requirement-item.text-success {
+            font-weight: 500;
+        }
+        
+        .password-requirements {
+            line-height: 1.4;
+        }
+        
+        .form-control:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            border-color: #86b7fe;
+        }
+    </style>
 @endsection
