@@ -82,4 +82,10 @@ class Project extends Model
     {
         return $this->hasMany(Testimonial::class, 'project_id');
     }
+
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'user_favorites', 'project_id', 'user_id')
+                    ->withTimestamps();
+    }
 }

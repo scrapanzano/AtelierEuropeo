@@ -48,10 +48,16 @@
                 </div>
             </div>
         @else
-            {{-- Utente loggato non admin - Implementa qui la logica per salvare ai preferiti --}}
-            <button type="button" class="btn p-0 position-absolute top-0 end-0 m-2"
-                style="z-index: 3; width: 40px; height: 40px;" onclick="addToFavorites({{ $project->id }})">
-                <i class="bi bi-heart text-white d-flex justify-content-center align-items-center"
+            {{-- Utente loggato non admin - Gestione preferiti --}}
+            @php
+                $isFavorite = auth()->user()->favoriteProjects()->where('project_id', $project->id)->exists();
+            @endphp
+            <button type="button" 
+                    class="btn p-0 position-absolute top-0 end-0 m-2 favorite-btn"
+                    style="z-index: 3; width: 40px; height: 40px;" 
+                    data-project-id="{{ $project->id }}"
+                    data-is-favorite="{{ $isFavorite ? 'true' : 'false' }}">
+                <i class="bi bi-heart{{ $isFavorite ? '-fill' : '' }} text-white d-flex justify-content-center align-items-center"
                     style="font-size: 1.5rem; width: 100%; height: 100%;"></i>
             </button>
         @endif
@@ -161,26 +167,3 @@
         @endif
     </div>
 </div>
-
-{{-- Script per gestire i preferiti --}}
-<script>
-    function addToFavorites(projectId) {
-        // TODO: Implementare la logica per salvare ai preferiti
-        console.log('Salvare il progetto ' + projectId + ' ai preferiti');
-
-        // Placeholder: qui puoi implementare la chiamata AJAX per salvare il preferito
-        // Esempio:
-        // fetch('/favorites/' + projectId, {
-        //     method: 'POST',
-        //     headers: {
-        //         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({project_id: projectId})
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     // Gestire la risposta (cambiare icona, mostrare messaggio, etc.)
-        // });
-    }
-</script>

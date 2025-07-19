@@ -5,6 +5,7 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AdminApplicationController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,6 +78,16 @@ Route::middleware('auth')->group(function () {
     Route::prefix('project/{id}')->name('applications.')->group(function () {
         Route::get('/apply', [ApplicationController::class, 'create'])->name('create');
         Route::post('/apply', [ApplicationController::class, 'store'])->name('store');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Favorites Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('favorites')->name('favorites.')->group(function () {
+        Route::get('/', [FavoriteController::class, 'index'])->name('index');
+        Route::post('/toggle', [FavoriteController::class, 'toggle'])->name('toggle');
     });
 });
 

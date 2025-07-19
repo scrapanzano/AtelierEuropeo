@@ -106,22 +106,6 @@
                         @endif
                     </div>
                 </div>
-
-                <!-- Progetti Salvati (placeholder per future implementazioni) -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">
-                            <i class="bi bi-heart me-2"></i>Progetti Salvati
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center py-4">
-                            <i class="bi bi-heart display-4 text-muted"></i>
-                            <p class="text-muted mt-2">Funzionalità in arrivo!</p>
-                            <small class="text-muted">Presto potrai salvare i tuoi progetti preferiti.</small>
-                        </div>
-                    </div>
-                </div>
             </div>
         @else
             <!-- Sezione Admin -->

@@ -57,6 +57,12 @@ class User extends Authenticatable
         return $this->hasMany(Application::class, 'user_id');
     }
 
+    public function favoriteProjects()
+    {
+        return $this->belongsToMany(Project::class, 'user_favorites', 'user_id', 'project_id')
+                    ->withTimestamps();
+    }
+
     public function isAdmin()
     {
         return $this->role === 'admin'; 

@@ -87,8 +87,15 @@
                         </a>
                     @else
                         {{-- Utente registrato: pulsante salva nei preferiti --}}
-                        <button type="button" class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2" onclick="addToFavorites({{ $project->id }})">
-                            <i class="bi bi-heart me-2 fs-4"></i> Salva
+                        @php
+                            $isFavorite = auth()->user()->favoriteProjects()->where('project_id', $project->id)->exists();
+                        @endphp
+                        <button type="button" 
+                                class="btn btn-outline-primary btn-rounded d-inline-flex align-items-center px-3 py-2 favorite-btn" 
+                                data-project-id="{{ $project->id }}"
+                                data-is-favorite="{{ $isFavorite ? 'true' : 'false' }}">
+                            <i class="bi bi-heart{{ $isFavorite ? '-fill' : '' }} me-2 fs-4"></i> 
+                            <span class="btn-text">{{ $isFavorite ? 'Rimuovi' : 'Salva' }}</span>
                         </button>
                     @endif
                 @else
@@ -272,6 +279,106 @@
         </div>
     </div>
 
+    <!-- Toast per notifiche -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="favoriteToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-heart-fill text-danger me-2"></i>
+                <strong class="me-auto">Preferiti</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                <!-- Il messaggio verrà inserito qui dinamicamente -->
+            </div>
+        </div>
+    </div>
+
 @endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestione pulsante preferiti
+    const favoriteBtn = document.querySelector('.favorite-btn');
+    if (favoriteBtn) {
+        favoriteBtn.addEventListener('click', function() {
+            const projectId = this.dataset.projectId;
+            toggleFavorite(projectId, this);
+        });
+    }
+});
+
+function toggleFavorite(projectId, button) {
+    // Disabilita il pulsante durante la richiesta
+    button.disabled = true;
+    
+    fetch('{{ route("favorites.toggle") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            project_id: projectId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Aggiorna l'interfaccia
+            const icon = button.querySelector('i');
+            const text = button.querySelector('.btn-text');
+            
+            if (data.is_favorite) {
+                // Il progetto è ora nei preferiti
+                icon.className = 'bi bi-heart-fill me-2 fs-4';
+                text.textContent = 'Rimuovi';
+                button.dataset.isFavorite = 'true';
+            } else {
+                // Il progetto è stato rimosso dai preferiti
+                icon.className = 'bi bi-heart me-2 fs-4';
+                text.textContent = 'Salva';
+                button.dataset.isFavorite = 'false';
+            }
+            
+            // Mostra toast
+            showToast(data.message);
+        } else {
+            showToast(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Errore:', error);
+        showToast('Si è verificato un errore. Riprova più tardi.', 'error');
+    })
+    .finally(() => {
+        // Riabilita il pulsante
+        button.disabled = false;
+    });
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('favoriteToast');
+    const toastMessage = document.getElementById('toastMessage');
+    const toastHeader = toast.querySelector('.toast-header');
+    
+    // Aggiorna il messaggio
+    toastMessage.textContent = message;
+    
+    // Aggiorna l'icona e il colore in base al tipo
+    const icon = toastHeader.querySelector('i');
+    if (type === 'error') {
+        icon.className = 'bi bi-exclamation-triangle-fill text-danger me-2';
+        toastHeader.className = 'toast-header bg-danger text-white';
+    } else {
+        icon.className = 'bi bi-heart-fill text-danger me-2';
+        toastHeader.className = 'toast-header';
+    }
+    
+    // Mostra il toast
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+}
+</script>
 
 

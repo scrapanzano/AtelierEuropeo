@@ -47,4 +47,123 @@
             @endforeach
         </div>
     </div>
+
+    <!-- Toast per notifiche -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="favoriteToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <i class="bi bi-heart-fill text-danger me-2"></i>
+                <strong class="me-auto">Preferiti</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                <!-- Il messaggio verrà inserito qui dinamicamente -->
+            </div>
+        </div>
+    </div>
 @endsection
+
+@section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Script caricato per projects.blade.php');
+
+            // Gestione pulsanti preferiti
+            document.querySelectorAll('.favorite-btn').forEach(function(button) {
+                console.log('Trovato pulsante preferiti:', button);
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Click sul pulsante preferiti');
+                    const projectId = this.dataset.projectId;
+                    console.log('Project ID:', projectId);
+                    toggleFavorite(projectId, this);
+                });
+            });
+        });
+
+        function toggleFavorite(projectId, button) {
+            console.log('toggleFavorite chiamata con projectId:', projectId);
+
+            // Disabilita il pulsante durante la richiesta
+            button.disabled = true;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            console.log('CSRF Token trovato:', csrfToken ? csrfToken.getAttribute('content') : 'NESSUN TOKEN');
+
+            fetch('/favorites/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken ? csrfToken.getAttribute('content') : ''
+                    },
+                    body: JSON.stringify({
+                        project_id: projectId
+                    })
+                })
+                .then(response => {
+                    console.log('Risposta ricevuta:', response);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Dati ricevuti:', data);
+                    if (data.success) {
+                        // Aggiorna l'interfaccia
+                        const icon = button.querySelector('i');
+
+                        if (data.is_favorite) {
+                            // Il progetto è ora nei preferiti
+                            icon.className =
+                                'bi bi-heart-fill text-white d-flex justify-content-center align-items-center';
+                            button.dataset.isFavorite = 'true';
+                        } else {
+                            // Il progetto è stato rimosso dai preferiti
+                            icon.className = 'bi bi-heart text-white d-flex justify-content-center align-items-center';
+                            button.dataset.isFavorite = 'false';
+                        }
+
+                        // Mostra toast
+                        showToast(data.message);
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Errore:', error);
+                    showToast('Si è verificato un errore. Riprova più tardi.', 'error');
+                })
+                .finally(() => {
+                    // Riabilita il pulsante
+                    button.disabled = false;
+                });
+        }
+
+        function showToast(message, type = 'success') {
+            console.log('Mostra toast:', message, type);
+            const toast = document.getElementById('favoriteToast');
+            if (!toast) {
+                console.error('Toast element non trovato');
+                return;
+            }
+
+            const toastMessage = document.getElementById('toastMessage');
+            const toastHeader = toast.querySelector('.toast-header');
+
+            // Aggiorna il messaggio
+            toastMessage.textContent = message;
+
+            // Aggiorna l'icona e il colore in base al tipo
+            const icon = toastHeader.querySelector('i');
+            if (type === 'error') {
+                icon.className = 'bi bi-exclamation-triangle-fill text-danger me-2';
+                toastHeader.className = 'toast-header bg-danger text-white';
+            } else {
+                icon.className = 'bi bi-heart-fill text-danger me-2';
+                toastHeader.className = 'toast-header';
+            }
+
+            // Mostra il toast
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+    </script>

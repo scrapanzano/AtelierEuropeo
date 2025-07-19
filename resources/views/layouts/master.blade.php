@@ -7,6 +7,7 @@
     <link rel="icon" href="{{ asset('img/ae-icon.svg') }}" type="image/svg+xml">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ url('/') }}/css/style.css">
@@ -109,6 +110,14 @@
                                         Le Mie Candidature
                                     </a>
                                 </li>
+                                <!-- I miei preferiti (solo per utenti non admin) -->
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center"
+                                        href="{{ route('favorites.index') }}">
+                                        <i class="bi bi-heart-fill me-2"></i>
+                                        I Miei Preferiti
+                                    </a>
+                                </li>
                             @else
                                 <!-- Dashboard admin (solo per admin) -->
                                 <li>
@@ -157,6 +166,8 @@
     @yield('breadcrumb')
 
     @yield('body')
+
+    @yield('scripts')
 
 </body>
 
