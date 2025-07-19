@@ -20,4 +20,20 @@ class FrontController extends Controller
     public function getAbout() {
         return view('about');
     }
+
+    public function getContact() {
+        return view('contact');
+    }
+
+    public function getCorpoEuropeo() {
+        return view('corpo-europeo-solidarieta');
+    }
+
+    public function getScambiGiovanili() {
+        return view('scambi-giovanili');
+    }
+
+    public function getCorsiFormazione() {
+        return view('corsi-formazione');
+    }
 }

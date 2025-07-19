@@ -141,7 +141,19 @@
                         <span class="{{ $status['class'] }} fw-semibold">{{ $status['text'] }}</span>
                     </div>
                     <div class="col-6">
-                        <strong>Candidature:</strong> {{ $project->application->count() }}/{{ $project->requested_people }}
+                        <strong>Candidature:</strong> {{ $project->application->count() }}
+                    </div>
+                    <div class="col-6">
+                        <strong>Approvate:</strong> 
+                        @php
+                            $approvedCount = $project->application->where('status', 'approved')->count();
+                        @endphp
+                        <span class="{{ $approvedCount >= $project->requested_people ? 'text-warning fw-bold' : 'text-muted' }}">
+                            {{ $approvedCount }}/{{ $project->requested_people }}
+                        </span>
+                        @if($approvedCount >= $project->requested_people)
+                            <i class="bi bi-exclamation-triangle text-warning ms-1" title="Limite raggiunto"></i>
+                        @endif
                     </div>
                     <div class="col-6">
                         <strong>Scadenza:</strong>

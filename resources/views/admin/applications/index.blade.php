@@ -135,6 +135,47 @@
         </div>
     </div>
 
+    <!-- Avviso limite partecipanti -->
+    @if($stats['approved'] >= $project->requested_people)
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="alert alert-warning border-left-warning" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+                        <div>
+                            <h6 class="alert-heading mb-1">
+                                <strong>Limite partecipanti raggiunto!</strong>
+                            </h6>
+                            <p class="mb-0">
+                                Il progetto ha raggiunto il numero massimo di partecipanti richiesti 
+                                (<strong>{{ $stats['approved'] }}/{{ $project->requested_people }}</strong>). 
+                                Non sarà possibile approvare ulteriori candidature.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @elseif($stats['approved'] > 0)
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="alert alert-info border-left-info" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-info-circle-fill me-3 fs-4"></i>
+                        <div>
+                            <p class="mb-0">
+                                <strong>Partecipanti approvati:</strong> {{ $stats['approved'] }}/{{ $project->requested_people }}
+                                @if($project->requested_people - $stats['approved'] > 0)
+                                    - Rimangono <strong>{{ $project->requested_people - $stats['approved'] }}</strong> posti disponibili.
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Lista Candidature -->
     <div class="row">
         <div class="col-md-12">
@@ -218,11 +259,17 @@
                                                     </a>
                                                     
                                                     @if($application->status === 'pending')
+                                                        @php
+                                                            $limitReached = $stats['approved'] >= $project->requested_people;
+                                                        @endphp
                                                         <button type="button" 
-                                                                class="btn btn-outline-success btn-sm" 
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#approveModal{{ $application->id }}"
-                                                                title="Approva">
+                                                                class="btn btn-outline-success btn-sm{{ $limitReached ? ' disabled' : '' }}" 
+                                                                @if(!$limitReached)
+                                                                    data-bs-toggle="modal" 
+                                                                    data-bs-target="#approveModal{{ $application->id }}"
+                                                                @endif
+                                                                title="{{ $limitReached ? 'Limite partecipanti raggiunto' : 'Approva' }}"
+                                                                {{ $limitReached ? 'disabled' : '' }}>
                                                             <i class="bi bi-check-lg"></i>
                                                         </button>
                                                         <button type="button" 
@@ -286,6 +333,25 @@
                         </div>
                         <div class="modal-body">
                             <p>Stai per approvare la candidatura di <strong>{{ $application->user->name }}</strong>.</p>
+                            
+                            @php
+                                $remainingSpots = $project->requested_people - $stats['approved'];
+                            @endphp
+                            
+                            @if($remainingSpots <= 3 && $remainingSpots > 0)
+                                <div class="alert alert-warning" role="alert">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                    <strong>Attenzione:</strong> Approvando questa candidatura rimarranno solo 
+                                    <strong>{{ $remainingSpots - 1 }}</strong> posti disponibili.
+                                </div>
+                            @elseif($remainingSpots === 1)
+                                <div class="alert alert-info" role="alert">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <strong>Ultimo posto disponibile!</strong> Approvando questa candidatura 
+                                    il progetto avrà raggiunto il numero massimo di partecipanti.
+                                </div>
+                            @endif
+                            
                             <div class="mb-3">
                                 <label for="admin_message{{ $application->id }}" class="form-label">Messaggio per il candidato (opzionale)</label>
                                 <textarea class="form-control" 
@@ -366,7 +432,14 @@
                                 <label for="status{{ $application->id }}" class="form-label">Stato</label>
                                 <select class="form-select" id="status{{ $application->id }}" name="status" required>
                                     <option value="pending" {{ $application->status === 'pending' ? 'selected' : '' }}>In Attesa</option>
-                                    <option value="approved" {{ $application->status === 'approved' ? 'selected' : '' }}>Approvata</option>
+                                    @php
+                                        $limitReached = $stats['approved'] >= $project->requested_people && $application->status !== 'approved';
+                                    @endphp
+                                    <option value="approved" 
+                                            {{ $application->status === 'approved' ? 'selected' : '' }}
+                                            {{ $limitReached ? 'disabled' : '' }}>
+                                        Approvata{{ $limitReached ? ' (Limite raggiunto)' : '' }}
+                                    </option>
                                     <option value="rejected" {{ $application->status === 'rejected' ? 'selected' : '' }}>Rifiutata</option>
                                 </select>
                             </div>

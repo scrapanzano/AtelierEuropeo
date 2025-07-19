@@ -56,9 +56,9 @@
                             Viaggiare all'Estero
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Corpo Europeo di Solidarietà</a></li>
-                            <li><a class="dropdown-item" href="#">Scambi Giovanili</a></li>
-                            <li><a class="dropdown-item" href="#">Corsi di Formazione</a>
+                            <li><a class="dropdown-item" href="{{ route('corpo-europeo')}}">Corpo Europeo di Solidarietà</a></li>
+                            <li><a class="dropdown-item" href="{{ route('scambi-giovanili')}}">Scambi Giovanili</a></li>
+                            <li><a class="dropdown-item" href="{{ route('corsi-formazione')}}">Corsi di Formazione</a>
                             </li>
                         </ul>
                     </li>
@@ -67,7 +67,7 @@
                             href="{{ route('project.index') }}">Progetti disponibili</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @yield('active_contatti')" aria-current="page" href="#">Contatti</a>
+                        <a class="nav-link @yield('active_contatti')" aria-current="page" href="{{ route('contact') }}">Contatti</a>
                     </li>
                 </ul>
                 @if (auth()->check())

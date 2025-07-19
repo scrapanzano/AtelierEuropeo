@@ -34,6 +34,12 @@ Route::get('/', [FrontController::class, 'getHome'])->name('home');
 
 // Static pages
 Route::get('/about', [FrontController::class, 'getAbout'])->name('about');
+Route::get('/contact', [FrontController::class, 'getContact'])->name('contact');
+
+// Viaggiare all'estero pages
+Route::get('/corpo-europeo-solidarieta', [FrontController::class, 'getCorpoEuropeo'])->name('corpo-europeo');
+Route::get('/scambi-giovanili', [FrontController::class, 'getScambiGiovanili'])->name('scambi-giovanili');
+Route::get('/corsi-formazione', [FrontController::class, 'getCorsiFormazione'])->name('corsi-formazione');
 
 // Portfolio (completed projects with testimonials)
 Route::get('/portfolio', [ProjectController::class, 'portfolio'])->name('project.portfolio');

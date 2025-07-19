@@ -67,6 +67,19 @@ class AdminApplicationController extends Controller
             'admin_message' => 'nullable|string|max:1000'
         ]);
 
+        // Se si sta tentando di approvare, controlla il limite
+        if ($request->status === 'approved') {
+            $project = $application->project;
+            $approvedApplicationsCount = Application::where('project_id', $project->id)
+                ->where('status', 'approved')
+                ->count();
+
+            if ($approvedApplicationsCount >= $project->requested_people) {
+                return redirect()->back()->with('error', 
+                    "Non è possibile approvare questa candidatura. Il progetto ha già raggiunto il numero massimo di partecipanti richiesti ({$project->requested_people}).");
+            }
+        }
+
         $application->update([
             'status' => $request->status,
             'admin_message' => $request->admin_message,
@@ -97,6 +110,17 @@ class AdminApplicationController extends Controller
         $request->validate([
             'admin_message' => 'nullable|string|max:1000'
         ]);
+
+        // Controlla se ci sono già abbastanza candidature approvate
+        $project = $application->project;
+        $approvedApplicationsCount = Application::where('project_id', $project->id)
+            ->where('status', 'approved')
+            ->count();
+
+        if ($approvedApplicationsCount >= $project->requested_people) {
+            return redirect()->back()->with('error', 
+                "Non è possibile approvare questa candidatura. Il progetto ha già raggiunto il numero massimo di partecipanti richiesti ({$project->requested_people}).");
+        }
 
         $application->update([
             'status' => 'approved',
