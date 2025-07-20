@@ -189,7 +189,7 @@
     @endif
 
     <!-- Lista Candidature -->
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">

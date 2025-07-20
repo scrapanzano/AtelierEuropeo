@@ -18,11 +18,17 @@ class FrontController extends Controller
     }
 
     public function getAbout() {
-        return view('about');
+        return view('about')->with([
+            'pageTitle' => __('about.about_title'),
+            'pageDescription' => __('about.mission_text')
+        ]);
     }
 
     public function getContact() {
-        return view('contact');
+        return view('contact')->with([
+            'pageTitle' => __('contact.contact_title'),
+            'pageDescription' => __('contact.contact_subtitle')
+        ]);
     }
 
     public function getCorpoEuropeo() {

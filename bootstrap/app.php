@@ -15,6 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'isAdmin' => App\Http\Middleware\isAdminMiddleware::class,
             'isRegisteredUser' => App\Http\Middleware\isRegisteredUserMiddleware::class,
             'checkProjectAccess' => App\Http\Middleware\CheckProjectStatusAccess::class,
+            'setLocale' => App\Http\Middleware\SetLocale::class,
+        ]);
+        
+        // Applica il middleware di localizzazione a tutte le route web
+        $middleware->web(append: [
+            App\Http\Middleware\SetLocale::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

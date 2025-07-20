@@ -122,6 +122,25 @@
                 {{-- Modal di conferma eliminazione --}}
             @endif
         </div>
+        
+        {{-- Informazioni paese e associazione --}}
+        <div class="project-info mt-2 mb-2">
+            <div class="d-flex flex-wrap gap-2 small text-muted">
+                @if($project->location)
+                    <span class="d-flex align-items-center">
+                        <i class="bi bi-geo-alt me-1"></i>
+                        <span class="country-info">{{ $project->location }}</span>
+                    </span>
+                @endif
+                @if($project->association)
+                    <span class="d-flex align-items-center">
+                        <i class="bi bi-building me-1"></i>
+                        <span class="organization-info">{{ $project->association->name }}</span>
+                    </span>
+                @endif
+            </div>
+        </div>
+        
         <p class="card-text pt-2">{{ $project->sum_description }}</p>
         
         {{-- Informazioni amministrative per admin --}}

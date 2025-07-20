@@ -25,6 +25,25 @@ require __DIR__.'/auth.php';
 
 /*
 |--------------------------------------------------------------------------
+| Language Routes
+|--------------------------------------------------------------------------
+*/
+
+// Language switching route
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['it', 'en'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
+// Language test page (temporary - remove in production)
+Route::get('/language-test', function () {
+    return view('language-test');
+})->name('language.test');
+
+/*
+|--------------------------------------------------------------------------
 | Public Routes (Guest & Authenticated)
 |--------------------------------------------------------------------------
 */
@@ -48,6 +67,11 @@ Route::get('/portfolio', [ProjectController::class, 'portfolio'])->name('project
 Route::get('/project', [ProjectController::class, 'index'])
     ->middleware('checkProjectAccess')
     ->name('project.index');
+
+// Admin-only project creation route (must be before the {project} wildcard route)
+Route::get('/project/create', [ProjectController::class, 'create'])
+    ->middleware(['auth', 'isAdmin'])
+    ->name('project.create');
 
 // Single project view (public)
 Route::get('/project/{project}', [ProjectController::class, 'show'])->name('project.show');
@@ -115,8 +139,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     |--------------------------------------------------------------------------
     */
     Route::prefix('project')->name('project.')->group(function () {
-        // Project CRUD operations
-        Route::get('/create', [ProjectController::class, 'create'])->name('create');
+        // Project CRUD operations (create route moved above)
         Route::post('/', [ProjectController::class, 'store'])->name('store');
         Route::get('/{id}/edit', [ProjectController::class, 'edit'])->name('edit');
         Route::put('/{id}', [ProjectController::class, 'update'])->name('update');

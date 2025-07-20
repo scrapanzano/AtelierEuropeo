@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'contact_title' => 'Contact Us',
+    'contact_subtitle' => 'We are here to help you',
+    'get_in_touch' => 'Get in Touch',
+    'contact_form' => 'Contact Form',
+    'name' => 'Name',
+    'email' => 'Email',
+    'subject' => 'Subject',
+    'message' => 'Message',
+    'send_message' => 'Send Message',
+    'contact_info' => 'Contact Information',
+    'office_hours' => 'Office Hours',
+    'monday_friday' => 'Monday - Friday',
+    'office_hours_time' => '9:00 AM - 6:00 PM',
+    'address' => 'Address',
+    'phone' => 'Phone',
+    'fax' => 'Fax',
+    'social_media' => 'Social Media',
+    'follow_us' => 'Follow Us on Social Media',
+    'required_fields' => 'Required fields',
+    'message_sent' => 'Message sent successfully!',
+    'message_error' => 'Error sending message. Please try again.',
+    'location_map' => 'Location Map',
+];

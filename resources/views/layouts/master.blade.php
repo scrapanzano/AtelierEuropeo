@@ -21,9 +21,28 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
     </script>
+    
+    <!-- Alpine.js per funzionalità interattive -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Bootstrap Icons-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* Stile per il selettore di lingua */
+        .language-selector .dropdown-toggle::after {
+            vertical-align: 0.125em;
+        }
+        
+        .language-selector .dropdown-item.active {
+            background-color: var(--bs-primary);
+            color: white;
+        }
+        
+        .language-selector .dropdown-item:hover {
+            background-color: var(--bs-primary-bg-subtle);
+        }
+    </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -62,7 +81,11 @@
                             <li>
                                 <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.edit') }}">
                                     <i class="bi bi-person-gear me-2"></i>
-                                    Il Mio Profilo
+                                    @if(app()->getLocale() === 'it')
+                                        Il Mio Profilo
+                                    @else
+                                        My Profile
+                                    @endif
                                 </a>
                             </li>
 
@@ -72,7 +95,11 @@
                                     <a class="dropdown-item d-flex align-items-center"
                                         href="{{ route('applications.index') }}">
                                         <i class="bi bi-file-earmark-text me-2"></i>
-                                        Le Mie Candidature
+                                        @if(app()->getLocale() === 'it')
+                                            Le Mie Candidature
+                                        @else
+                                            My Applications
+                                        @endif
                                     </a>
                                 </li>
                                 <!-- I miei preferiti (solo per utenti non admin) -->
@@ -80,7 +107,11 @@
                                     <a class="dropdown-item d-flex align-items-center"
                                         href="{{ route('favorites.index') }}">
                                         <i class="bi bi-heart-fill me-2"></i>
-                                        I Miei Preferiti
+                                        @if(app()->getLocale() === 'it')
+                                            I Miei Preferiti
+                                        @else
+                                            My Favorites
+                                        @endif
                                     </a>
                                 </li>
                             @else
@@ -89,14 +120,22 @@
                                     <a class="dropdown-item d-flex align-items-center"
                                         href="{{ route('project.index') }}">
                                         <i class="bi bi-speedometer2 me-2"></i>
-                                        Dashboard Admin
+                                        @if(app()->getLocale() === 'it')
+                                            Dashboard Admin
+                                        @else
+                                            Admin Dashboard
+                                        @endif
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center"
                                         href="{{ route('project.create') }}">
                                         <i class="bi bi-plus-circle me-2"></i>
-                                        Nuovo Progetto
+                                        @if(app()->getLocale() === 'it')
+                                            Nuovo Progetto
+                                        @else
+                                            New Project
+                                        @endif
                                     </a>
                                 </li>
                             @endif
@@ -111,7 +150,11 @@
                                     @csrf
                                     <button type="submit" class="dropdown-item d-flex align-items-center text-danger">
                                         <i class="bi bi-box-arrow-right me-2"></i>
-                                        Esci
+                                        @if(app()->getLocale() === 'it')
+                                            Esci
+                                        @else
+                                            Logout
+                                        @endif
                                     </button>
                                 </form>
                             </li>
@@ -120,10 +163,33 @@
                 @else
                     <!-- Bottoni di accesso per utenti non autenticati -->
                     <div class="d-flex gap-2 me-2">
-                        <a href="{{ route('login') }}" class="btn btn-outline-light">Accedi</a>
-                        <a href="{{ route('register') }}" class="btn btn-warning">Registrati</a>
+                        <a href="{{ route('login') }}" class="btn btn-outline-light">{{ __('common.login') }}</a>
+                        <a href="{{ route('register') }}" class="btn btn-warning">{{ __('common.register') }}</a>
                     </div>
                 @endif
+                
+                <!-- Language Selector for Bootstrap -->
+                <div class="dropdown me-3 language-selector">
+                    <button class="btn btn-outline-light dropdown-toggle btn-sm" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        @if(app()->getLocale() === 'it')
+                            🇮🇹 IT
+                        @else
+                            🇬🇧 EN
+                        @endif
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                        <li>
+                            <a class="dropdown-item {{ app()->getLocale() === 'it' ? 'active' : '' }}" href="{{ route('lang.switch', 'it') }}">
+                                🇮🇹 {{ __('common.italian') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {{ app()->getLocale() === 'en' ? 'active' : '' }}" href="{{ route('lang.switch', 'en') }}">
+                                🇬🇧 {{ __('common.english') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 
                 <!-- Toggle button della navbar -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -137,34 +203,60 @@
             <div class="collapse navbar-collapse order-lg-1" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link @yield('active_home')" aria-current="page" href="{{ route('home') }}">Home</a>
+                        <a class="nav-link @yield('active_home')" aria-current="page" href="{{ route('home') }}">{{ __('common.home') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="{{ route('about') }}">Chi
-                            siamo</a>
+                        <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="{{ route('about') }}">{{ __('common.about') }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @yield('active_portfolio')" aria-current="page"
-                            href="{{ route('project.portfolio') }}">Portfolio progetti</a>
+                            href="{{ route('project.portfolio') }}">{{ __('projects.title') }} Portfolio</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle @yield('active_viaggiare')" href="#" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            Viaggiare all'Estero
+                            @if(app()->getLocale() === 'it')
+                                Viaggiare all'Estero
+                            @else
+                                Travel Abroad
+                            @endif
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('corpo-europeo')}}">Corpo Europeo di Solidarietà</a></li>
-                            <li><a class="dropdown-item" href="{{ route('scambi-giovanili')}}">Scambi Giovanili</a></li>
-                            <li><a class="dropdown-item" href="{{ route('corsi-formazione')}}">Corsi di Formazione</a>
-                            </li>
+                            <li><a class="dropdown-item" href="{{ route('corpo-europeo')}}">
+                                @if(app()->getLocale() === 'it')
+                                    Corpo Europeo di Solidarietà
+                                @else
+                                    European Solidarity Corps
+                                @endif
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ route('scambi-giovanili')}}">
+                                @if(app()->getLocale() === 'it')
+                                    Scambi Giovanili
+                                @else
+                                    Youth Exchanges
+                                @endif
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ route('corsi-formazione')}}">
+                                @if(app()->getLocale() === 'it')
+                                    Corsi di Formazione
+                                @else
+                                    Training Courses
+                                @endif
+                            </a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @yield('active_progetti')" aria-current="page"
-                            href="{{ route('project.index') }}">Progetti disponibili</a>
+                            href="{{ route('project.index') }}">
+                            @if(app()->getLocale() === 'it')
+                                Progetti disponibili
+                            @else
+                                Available Projects
+                            @endif
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @yield('active_contatti')" aria-current="page" href="{{ route('contact') }}">Contatti</a>
+                        <a class="nav-link @yield('active_contatti')" aria-current="page" href="{{ route('contact') }}">{{ __('common.contact') }}</a>
                     </li>
                 </ul>
             </div>
@@ -186,8 +278,13 @@
                         <h5 class="mb-0 text-warning">Atelier Europeo</h5>
                     </div>
                     <p class="text-light-emphasis small mb-3">
-                        Organizziamo progetti di mobilità europea per giovani: Corpo Europeo di Solidarietà, 
-                        Scambi Giovanili e Corsi di Formazione per costruire un'Europa più inclusiva e solidale.
+                        @if(app()->getLocale() === 'it')
+                            Organizziamo progetti di mobilità europea per giovani: Corpo Europeo di Solidarietà, 
+                            Scambi Giovanili e Corsi di Formazione per costruire un'Europa più inclusiva e solidale.
+                        @else
+                            We organize European mobility projects for young people: European Solidarity Corps, 
+                            Youth Exchanges and Training Courses to build a more inclusive and supportive Europe.
+                        @endif
                     </p>
                     <!-- Social Media -->
                     <div class="d-flex gap-2">
@@ -208,31 +305,45 @@
 
                 <!-- Colonna Link Rapidi -->
                 <div class="col-lg-2 col-md-6">
-                    <h6 class="text-white mb-3">Link Rapidi</h6>
+                    <h6 class="text-white mb-3">
+                        @if(app()->getLocale() === 'it')
+                            Link Rapidi
+                        @else
+                            Quick Links
+                        @endif
+                    </h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a href="{{ route('home') }}" class="nav-link p-1">
-                                Home
+                                {{ __('common.home') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('about') }}" class="nav-link p-1">
-                                Chi siamo
+                                {{ __('common.about') }}
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('project.portfolio') }}" class="nav-link p-1">
-                                Portfolio progetti
+                                @if(app()->getLocale() === 'it')
+                                    Portfolio progetti
+                                @else
+                                    Projects Portfolio
+                                @endif
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('project.index') }}" class="nav-link p-1">
-                                Progetti disponibili
+                                @if(app()->getLocale() === 'it')
+                                    Progetti disponibili
+                                @else
+                                    Available Projects
+                                @endif
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('contact') }}" class="nav-link p-1">
-                                Contatti
+                                {{ __('common.contact') }}
                             </a>
                         </li>
                     </ul>
@@ -240,21 +351,39 @@
 
                 <!-- Colonna Programmi -->
                 <div class="col-lg-3 col-md-6">
-                    <h6 class="text-white mb-3">I Nostri Programmi</h6>
+                    <h6 class="text-white mb-3">
+                        @if(app()->getLocale() === 'it')
+                            I Nostri Programmi
+                        @else
+                            Our Programs
+                        @endif
+                    </h6>
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a href="{{ route('corpo-europeo') }}" class="nav-link p-1">
-                            Corpo Europeo di Solidarietà
+                                @if(app()->getLocale() === 'it')
+                                    Corpo Europeo di Solidarietà
+                                @else
+                                    European Solidarity Corps
+                                @endif
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('scambi-giovanili') }}" class="nav-link p-1">
-                                Scambi Giovanili
+                                @if(app()->getLocale() === 'it')
+                                    Scambi Giovanili
+                                @else
+                                    Youth Exchanges
+                                @endif
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('corsi-formazione') }}" class="nav-link p-1">
-                                Corsi di Formazione
+                                @if(app()->getLocale() === 'it')
+                                    Corsi di Formazione
+                                @else
+                                    Training Courses
+                                @endif
                             </a>
                         </li>
                     </ul>
@@ -262,7 +391,13 @@
 
                 <!-- Colonna Contatti -->
                 <div class="col-lg-3 col-md-6">
-                    <h6 class="text-white mb-3">Contatti</h6>
+                    <h6 class="text-white mb-3">
+                        @if(app()->getLocale() === 'it')
+                            Contatti
+                        @else
+                            Contact
+                        @endif
+                    </h6>
                     <ul class="nav flex-column">
                         <li class="nav-item d-flex align-items-start py-1">
                             <i class="bi bi-geo-alt-fill text-white me-2 mt-1"></i>
@@ -298,13 +433,29 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <small class="text-light-emphasis">
-                        © {{ date('Y') }} Atelier Europeo. Tutti i diritti riservati.
+                        @if(app()->getLocale() === 'it')
+                            © {{ date('Y') }} Atelier Europeo. Tutti i diritti riservati.
+                        @else
+                            © {{ date('Y') }} Atelier Europeo. All rights reserved.
+                        @endif
                     </small>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <div class="d-flex flex-wrap justify-content-md-end gap-3">
-                        <a href="#" class="nav-link text-light-emphasis p-0">Privacy Policy</a>
-                        <a href="#" class="nav-link text-light-emphasis p-0">Cookie Policy</a>
+                        <a href="#" class="nav-link text-light-emphasis p-0">
+                            @if(app()->getLocale() === 'it')
+                                Privacy Policy
+                            @else
+                                Privacy Policy
+                            @endif
+                        </a>
+                        <a href="#" class="nav-link text-light-emphasis p-0">
+                            @if(app()->getLocale() === 'it')
+                                Cookie Policy
+                            @else
+                                Cookie Policy
+                            @endif
+                        </a>
                         <small class="text-light-emphasis">
                             P.IVA: 03747110983
                         </small>

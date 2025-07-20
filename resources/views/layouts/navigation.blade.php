@@ -19,7 +19,10 @@
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-4">
+                <!-- Language Selector -->
+                <x-language-selector />
+                
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
@@ -80,6 +83,25 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <!-- Language Selector for Mobile -->
+                <div class="px-4 py-2">
+                    <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">{{ __('common.language') }}</div>
+                    <div class="flex space-x-2">
+                        <a 
+                            href="{{ route('lang.switch', 'it') }}" 
+                            class="px-3 py-1 text-sm rounded-md {{ app()->getLocale() === 'it' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100' }}"
+                        >
+                            IT
+                        </a>
+                        <a 
+                            href="{{ route('lang.switch', 'en') }}" 
+                            class="px-3 py-1 text-sm rounded-md {{ app()->getLocale() === 'en' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-600 hover:bg-gray-100' }}"
+                        >
+                            EN
+                        </a>
+                    </div>
+                </div>
+                
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>

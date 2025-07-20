@@ -23,7 +23,7 @@
                 </li>
                 @if (isset($project))
                     <li class="breadcrumb-item">
-                        <a href="{{ route('project.show', $project) }}" class="text-decoration-none">{{ $project->title }}</a>
+                        <a href="{{ route('project.show', $project->id) }}" class="text-decoration-none">{{ $project->title }}</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">Modifica Progetto</li>
                 @else
