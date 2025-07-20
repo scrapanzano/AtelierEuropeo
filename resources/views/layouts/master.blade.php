@@ -154,7 +154,7 @@
                 
                 <!-- Language Selector -->
                 <div class="dropdown me-3">
-                    <button class="btn btn-outline-light dropdown-toggle btn-sm" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-light dropdown-toggle btn-sm" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         @if(app()->getLocale() === 'it')
                             🇮🇹 IT
                         @else

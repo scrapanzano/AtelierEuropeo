@@ -92,21 +92,21 @@
             <div class="row g-3">
                 <!-- Elimina -->
                 <div class="col-md-6">
-                    <div class="card border-danger h-100">
+                    <div class="card border-danger h-100 d-flex">
                         <div class="card-header bg-light border-danger">
                             <h6 class="text-danger fw-bold mb-0">
                                 <i class="bi bi-trash3 me-2"></i>
                                 Elimina Definitivamente
                             </h6>
                         </div>
-                        <div class="card-body text-center">
+                        <div class="card-body text-center d-flex flex-column">
                             <div class="mb-3">
                                 <i class="bi bi-exclamation-circle text-danger" style="font-size: 2rem;"></i>
                             </div>
-                            <p class="text-muted mb-3">
+                            <p class="text-muted mb-3 flex-grow-1">
                                 Il progetto <strong>sarà rimosso permanentemente</strong> dal database insieme a tutti i dati associati.
                             </p>
-                            <form method="post" action="{{ route('project.destroy', ['id' => $project->id]) }}">
+                            <form method="post" action="{{ route('project.destroy', ['id' => $project->id]) }}" class="mt-auto">
                                 @method('DELETE')
                                 @csrf
                                 <button type="submit" class="btn btn-danger btn-lg w-100">
@@ -120,21 +120,22 @@
 
                 <!-- Annulla -->
                 <div class="col-md-6">
-                    <div class="card border-secondary h-100">
+                    <div class="card border-secondary h-100 d-flex">
                         <div class="card-header bg-light border-secondary">
                             <h6 class="text-secondary fw-bold mb-0">
                                 <i class="bi bi-arrow-left me-2"></i>
                                 Annulla Operazione
                             </h6>
                         </div>
-                        <div class="card-body text-center">
+                        <div class="card-body text-center d-flex flex-column">
                             <div class="mb-3">
                                 <i class="bi bi-shield-check text-success" style="font-size: 2rem;"></i>
                             </div>
-                            <p class="text-muted mb-3">
+                            <p class="text-muted mb-3 flex-grow-1">
                                 Il progetto <strong>rimarrà invariato</strong> e non verrà eliminato dal database.
                             </p>
-                            <a href="{{ route('project.index') }}" class="btn btn-secondary btn-lg w-100">
+                            <div class="mt-auto">
+                                <a href="{{ route('project.index') }}" class="btn btn-secondary btn-lg w-100">
                                     <i class="bi bi-arrow-left me-2"></i>
                                     Torna ai Progetti
                                 </a>
@@ -142,6 +143,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
             <!-- Avviso importante -->
             <div class="alert alert-warning border-0 mt-4">

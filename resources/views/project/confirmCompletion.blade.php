@@ -93,21 +93,21 @@
             <div class="row g-3">
                 <!-- Completa -->
                 <div class="col-md-6">
-                    <div class="card border-warning h-100">
+                    <div class="card border-warning h-100 d-flex">
                         <div class="card-header bg-light border-warning">
                             <h6 class="text-warning fw-bold mb-0">
                                 <i class="bi bi-check-circle me-2"></i>
                                 Contrassegna come Completato
                             </h6>
                         </div>
-                        <div class="card-body text-center">
+                        <div class="card-body text-center d-flex flex-column">
                             <div class="mb-3">
                                 <i class="bi bi-lock text-warning" style="font-size: 2rem;"></i>
                             </div>
-                            <p class="text-muted mb-3">
+                            <p class="text-muted mb-3 flex-grow-1">
                                 Il progetto <strong>sarà contrassegnato come completato</strong> e non potrà più essere modificato.
                             </p>
-                            <form method="post" action="{{ route('project.complete', ['id' => $project->id]) }}">
+                            <form method="post" action="{{ route('project.complete', ['id' => $project->id]) }}" class="mt-auto">
                                 @csrf
                                 @method('PUT')
                                 <!-- Mantieni tutti i dati del form originale tranne il file -->
@@ -139,24 +139,26 @@
 
                 <!-- Annulla -->
                 <div class="col-md-6">
-                    <div class="card border-secondary h-100">
+                    <div class="card border-secondary h-100 d-flex">
                         <div class="card-header bg-light border-secondary">
                             <h6 class="text-secondary fw-bold mb-0">
                                 <i class="bi bi-arrow-left me-2"></i>
                                 Continua a Modificare
                             </h6>
                         </div>
-                        <div class="card-body text-center">
+                        <div class="card-body text-center d-flex flex-column">
                             <div class="mb-3">
                                 <i class="bi bi-pencil-square text-primary" style="font-size: 2rem;"></i>
                             </div>
-                            <p class="text-muted mb-3">
+                            <p class="text-muted mb-3 flex-grow-1">
                                 Il progetto <strong>rimarrà modificabile</strong> e potrai continuare ad aggiornarlo.
                             </p>
-                            <a href="{{ route('project.edit', ['id' => $project->id]) }}" class="btn btn-secondary btn-lg w-100">
+                            <div class="mt-auto">
+                                <a href="{{ route('project.edit', ['id' => $project->id]) }}" class="btn btn-secondary btn-lg w-100">
                                     <i class="bi bi-arrow-left me-2"></i>
                                     Torna alla Modifica
                                 </a>
+                            </div>
                         </div>
                     </div>
                 </div>
