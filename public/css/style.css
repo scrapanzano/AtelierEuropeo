@@ -94,3 +94,11 @@
         font-size: 1rem;
     }
 }
+
+.bg-europe {
+    background-color: #26304e !important;
+}
+
+.text-europe {
+    color: #26304e !important;
+}
