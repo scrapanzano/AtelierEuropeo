@@ -27,22 +27,6 @@
 
     <!-- Bootstrap Icons-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
-    <style>
-        /* Stile per il selettore di lingua */
-        .language-selector .dropdown-toggle::after {
-            vertical-align: 0.125em;
-        }
-        
-        .language-selector .dropdown-item.active {
-            background-color: var(--bs-primary);
-            color: white;
-        }
-        
-        .language-selector .dropdown-item:hover {
-            background-color: var(--bs-primary-bg-subtle);
-        }
-    </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -168,8 +152,8 @@
                     </div>
                 @endif
                 
-                <!-- Language Selector for Bootstrap -->
-                <div class="dropdown me-3 language-selector">
+                <!-- Language Selector -->
+                <div class="dropdown me-3">
                     <button class="btn btn-outline-light dropdown-toggle btn-sm" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         @if(app()->getLocale() === 'it')
                             🇮🇹 IT
@@ -179,12 +163,12 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
                         <li>
-                            <a class="dropdown-item {{ app()->getLocale() === 'it' ? 'active' : '' }}" href="{{ route('lang.switch', 'it') }}">
+                            <a class="dropdown-item" href="{{ route('lang.switch', 'it') }}">
                                 🇮🇹 {{ __('common.italian') }}
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item {{ app()->getLocale() === 'en' ? 'active' : '' }}" href="{{ route('lang.switch', 'en') }}">
+                            <a class="dropdown-item" href="{{ route('lang.switch', 'en') }}">
                                 🇬🇧 {{ __('common.english') }}
                             </a>
                         </li>

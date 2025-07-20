@@ -79,8 +79,12 @@ class ProjectController extends Controller
         
         // Gestisci l'upload dell'immagine
         if ($request->hasFile('image_path')) {
-            $imagePath = $request->file('image_path')->store('projects', 'public');
-            $data['image_path'] = $imagePath;
+            try {
+                $imagePath = $request->file('image_path')->store('projects', 'public');
+                $data['image_path'] = $imagePath;
+            } catch (\Exception $e) {
+                return redirect()->back()->withInput()->with('error', 'Errore durante il caricamento dell\'immagine. Riprova.');
+            }
         }
         
         $project = $dl->addProject($data);
@@ -88,7 +92,7 @@ class ProjectController extends Controller
         if ($project) {
             return redirect()->route('project.show', $project->id)->with('success', 'Progetto creato con successo!');
         } else {
-            return redirect()->back()->with('error', 'Errore nella creazione del progetto.');
+            return redirect()->back()->withInput()->with('error', 'Errore nella creazione del progetto. Riprova più tardi.');
         }
     }
 
@@ -108,7 +112,7 @@ class ProjectController extends Controller
 
             return view('project.details')->with('project', $project);
         } else {
-            return view('errors.wrongID')->with('message', 'Wrong project ID has been used!');
+            return redirect()->route('project.index')->with('error', 'Progetto non trovato. Potrebbe essere stato eliminato.');
         }
     }
 
@@ -123,9 +127,8 @@ class ProjectController extends Controller
         if ($project != null) {
             // Controlla se il progetto è completato
             if ($project->status === 'completed') {
-                return view('errors.project-completed')
-                    ->with('project', $project)
-                    ->with('message', 'Questo progetto è stato completato e non può più essere modificato.');
+                return redirect()->route('project.show', $id)
+                    ->with('warning', 'Questo progetto è stato completato e non può più essere modificato.');
             }
 
             $categories = $dl->listCategories();
@@ -136,7 +139,7 @@ class ProjectController extends Controller
                 ->with('categories', $categories)
                 ->with('associations', $associations);
         } else {
-            return view('errors.wrongID')->with('message', "Wrong project ID has been used!");
+            return redirect()->route('project.index')->with('error', 'Progetto non trovato. Impossibile modificare.');
         }
     }
 
@@ -152,7 +155,7 @@ class ProjectController extends Controller
             // Controlla se il progetto è completato
             if ($project->status === 'completed') {
                 return redirect()->route('project.show', $id)
-                    ->with('error', 'Questo progetto è stato completato e non può più essere modificato.');
+                    ->with('warning', 'Questo progetto è stato completato e non può più essere modificato.');
             }
 
             $data = $request->validated();
@@ -166,17 +169,21 @@ class ProjectController extends Controller
             
             // Gestisci l'upload dell'immagine se presente
             if ($request->hasFile('image_path')) {
-                // Elimina la vecchia immagine SOLO se è un file di storage (non URL o path di default)
-                if ($project->image_path && 
-                    !str_starts_with($project->image_path, 'http') && 
-                    !str_starts_with($project->image_path, 'img/') &&
-                    Storage::disk('public')->exists($project->image_path)) {
-                    Storage::disk('public')->delete($project->image_path);
+                try {
+                    // Elimina la vecchia immagine SOLO se è un file di storage (non URL o path di default)
+                    if ($project->image_path && 
+                        !str_starts_with($project->image_path, 'http') && 
+                        !str_starts_with($project->image_path, 'img/') &&
+                        Storage::disk('public')->exists($project->image_path)) {
+                        Storage::disk('public')->delete($project->image_path);
+                    }
+                    
+                    // Salva la nuova immagine
+                    $imagePath = $request->file('image_path')->store('projects', 'public');
+                    $data['image_path'] = $imagePath;
+                } catch (\Exception $e) {
+                    return redirect()->back()->withInput()->with('error', 'Errore durante il caricamento dell\'immagine. Riprova.');
                 }
-                
-                // Salva la nuova immagine
-                $imagePath = $request->file('image_path')->store('projects', 'public');
-                $data['image_path'] = $imagePath;
             } else {
                 // Se non c'è una nuova immagine, mantieni quella esistente
                 unset($data['image_path']);
@@ -187,10 +194,10 @@ class ProjectController extends Controller
             if ($updatedProject) {
                 return redirect()->route('project.show', $id)->with('success', 'Progetto aggiornato con successo!');
             } else {
-                return redirect()->back()->with('error', 'Errore nell\'aggiornamento del progetto.');
+                return redirect()->back()->withInput()->with('error', 'Errore nell\'aggiornamento del progetto. Riprova più tardi.');
             }
         } else {
-            return view('errors.wrongID')->with('message', 'Wrong project ID has been used!');
+            return redirect()->route('project.index')->with('error', 'Progetto non trovato. Impossibile aggiornare.');
         }
     }
 
@@ -203,7 +210,7 @@ class ProjectController extends Controller
         $project = $dl->findProjectByID($id);
 
         if ($project == null) {
-            return view('errors.wrongID')->with('message', 'ID progetto non valido!');
+            return redirect()->route('project.index')->with('error', 'Progetto non trovato. Impossibile completare.');
         }
 
         // Controlla se il progetto è già completato
@@ -214,6 +221,11 @@ class ProjectController extends Controller
 
         // Recupera i dati del form dalla sessione
         $formData = session('completion_form_data', []);
+        
+        if (empty($formData)) {
+            return redirect()->route('project.edit', $id)
+                ->with('error', 'Sessione scaduta. Riprova a modificare il progetto.');
+        }
         
         return view('project.confirmCompletion')
             ->with('project', $project)
@@ -229,7 +241,7 @@ class ProjectController extends Controller
         $project = $dl->findProjectByID($id);
 
         if ($project == null) {
-            return view('errors.wrongID')->with('message', 'ID progetto non valido!');
+            return redirect()->route('project.index')->with('error', 'Progetto non trovato. Impossibile completare.');
         }
 
         // Controlla se il progetto è già completato
@@ -263,7 +275,7 @@ class ProjectController extends Controller
                 ->with('success', 'Progetto completato con successo! Non sarà più possibile modificarlo.');
         } else {
             return redirect()->route('project.edit', $id)
-                ->with('error', 'Errore nel completamento del progetto.');
+                ->with('error', 'Errore nel completamento del progetto. Riprova più tardi.');
         }
     }
 
@@ -275,7 +287,7 @@ class ProjectController extends Controller
         if ($project != null) {
             return view('project.deleteProject')->with('project', $project);
         } else {
-            return view('errors.wrongID')->with('message', "Wrong project ID has been used!");
+            return redirect()->route('project.index')->with('error', 'Progetto non trovato. Impossibile eliminare.');
         }
     }
 
@@ -285,8 +297,19 @@ class ProjectController extends Controller
     public function destroy(string $id)
     {
         $dl = new DataLayer();
+        $project = $dl->findProjectByID($id);
+        
+        if ($project == null) {
+            return redirect()->route('project.index')->with('error', 'Progetto non trovato. Impossibile eliminare.');
+        }
+        
         $deleted = $dl->deleteProject($id);
-        return redirect()->route('project.index')->with('success', 'Project deleted successfully!');
+        
+        if ($deleted) {
+            return redirect()->route('project.index')->with('success', 'Progetto eliminato con successo!');
+        } else {
+            return redirect()->route('project.index')->with('error', 'Si è verificato un errore durante l\'eliminazione del progetto.');
+        }
     }
 
     /**

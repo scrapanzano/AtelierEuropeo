@@ -58,6 +58,39 @@
                     </p>
                 </div>
 
+                <!-- Messaggi di sessione Laravel -->
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                @if (session('warning'))
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ session('warning') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                @if (session('info'))
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        {{ session('info') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
                 <!-- Alert per messaggi di validazione -->
                 <div id="validation-alert" class="alert alert-danger d-none" role="alert">
                     <h6 class="alert-heading mb-2">
@@ -312,7 +345,7 @@
                                 <label for="start_date" class="form-label">Data di Inizio <span class="text-danger">*</span></label>
                                 <input class="form-control @error('start_date') is-invalid @enderror"
                                     type="date" name="start_date" id="start_date"
-                                    value="{{ old('start_date', $project->start_date ?? '') }}" required />
+                                    value="{{ old('start_date', (isset($project) && $project->start_date) ? $project->start_date->format('Y-m-d') : '') }}" required />
                                 <div class="invalid-feedback" id="start_date-error"></div>
                                 @error('start_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -323,7 +356,7 @@
                                 <label for="end_date" class="form-label">Data di Fine <span class="text-danger">*</span></label>
                                 <input class="form-control @error('end_date') is-invalid @enderror"
                                     type="date" name="end_date" id="end_date"
-                                    value="{{ old('end_date', $project->end_date ?? '') }}" required />
+                                    value="{{ old('end_date', (isset($project) && $project->end_date) ? $project->end_date->format('Y-m-d') : '') }}" required />
                                 <div class="invalid-feedback" id="end_date-error"></div>
                                 @error('end_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -334,7 +367,7 @@
                                 <label for="expire_date" class="form-label">Scadenza Candidature <span class="text-danger">*</span></label>
                                 <input class="form-control @error('expire_date') is-invalid @enderror"
                                     type="date" name="expire_date" id="expire_date"
-                                    value="{{ old('expire_date', $project->expire_date ?? '') }}" required />
+                                    value="{{ old('expire_date', (isset($project) && $project->expire_date) ? $project->expire_date->format('Y-m-d') : '') }}" required />
                                 <div class="invalid-feedback" id="expire_date-error"></div>
                                 @error('expire_date')
                                     <div class="invalid-feedback">{{ $message }}</div>

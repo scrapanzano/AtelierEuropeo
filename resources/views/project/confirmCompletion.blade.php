@@ -24,9 +24,6 @@
     </div>
 </div>
 @endsection
-    </nav>
-</div>
-@endsection
 
 @section('body')
 <div class="container py-5">

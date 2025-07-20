@@ -118,3 +118,19 @@ if (!function_exists('translateStatus')) {
         return $statusTranslations[$status] ?? $status;
     }
 }
+
+if (!function_exists('formatDateForInput')) {
+    /**
+     * Formatta una data per i campi input di tipo date
+     */
+    function formatDateForInput($date)
+    {
+        if (!$date) return '';
+        
+        if (!$date instanceof \Carbon\Carbon) {
+            $date = \Carbon\Carbon::parse($date);
+        }
+        
+        return $date->format('Y-m-d');
+    }
+}
