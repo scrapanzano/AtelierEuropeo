@@ -32,47 +32,12 @@
             <a class="navbar-brand" href="{{ route('home') }}">
                 <img src="{{ asset('img/ae-icon.svg') }}" alt="Atelier Europeo" height="40">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link @yield('active_home')" aria-current="page" href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="{{ route('about') }}">Chi
-                            siamo</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @yield('active_portfolio')" aria-current="page"
-                            href="{{ route('project.portfolio') }}">Portfolio progetti</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle @yield('active_viaggiare')" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Viaggiare all'Estero
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('corpo-europeo')}}">Corpo Europeo di Solidarietà</a></li>
-                            <li><a class="dropdown-item" href="{{ route('scambi-giovanili')}}">Scambi Giovanili</a></li>
-                            <li><a class="dropdown-item" href="{{ route('corsi-formazione')}}">Corsi di Formazione</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @yield('active_progetti')" aria-current="page"
-                            href="{{ route('project.index') }}">Progetti disponibili</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @yield('active_contatti')" aria-current="page" href="{{ route('contact') }}">Contatti</a>
-                    </li>
-                </ul>
+            
+            <!-- Contenitore per toggle button e dropdown utente -->
+            <div class="d-flex align-items-center order-lg-2">
                 @if (auth()->check())
-                    <!-- Dropdown utente -->
-                    <div class="dropdown">
+                    <!-- Dropdown utente sempre visibile -->
+                    <div class="dropdown me-2">
                         <button class="btn btn-dark dropdown-toggle d-flex align-items-center gap-2"
                             type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <div class="d-flex align-items-center gap-2">
@@ -153,12 +118,55 @@
                         </ul>
                     </div>
                 @else
-                    <div class="d-flex gap-2">
+                    <!-- Bottoni di accesso per utenti non autenticati -->
+                    <div class="d-flex gap-2 me-2">
                         <a href="{{ route('login') }}" class="btn btn-outline-light">Accedi</a>
                         <a href="{{ route('register') }}" class="btn btn-warning">Registrati</a>
                     </div>
                 @endif
-
+                
+                <!-- Toggle button della navbar -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            
+            <!-- Menu collassabile -->
+            <div class="collapse navbar-collapse order-lg-1" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link @yield('active_home')" aria-current="page" href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="{{ route('about') }}">Chi
+                            siamo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('active_portfolio')" aria-current="page"
+                            href="{{ route('project.portfolio') }}">Portfolio progetti</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle @yield('active_viaggiare')" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Viaggiare all'Estero
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('corpo-europeo')}}">Corpo Europeo di Solidarietà</a></li>
+                            <li><a class="dropdown-item" href="{{ route('scambi-giovanili')}}">Scambi Giovanili</a></li>
+                            <li><a class="dropdown-item" href="{{ route('corsi-formazione')}}">Corsi di Formazione</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('active_progetti')" aria-current="page"
+                            href="{{ route('project.index') }}">Progetti disponibili</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @yield('active_contatti')" aria-current="page" href="{{ route('contact') }}">Contatti</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

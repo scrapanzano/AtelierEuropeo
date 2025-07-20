@@ -4,20 +4,20 @@
 
 @section('active_contatti', 'active')
 
-{{-- @section('breadcrumb')
-    <div class="container d-flex justify-content-start pt-4">
-        <nav aria-label="breadcrumb" class="w-100">
-            <ol class="breadcrumb bg-light bg-opacity-75 p-3 rounded-4 mb-4 align-items-center">
+@section('breadcrumb')
+<div class="bg-light py-2">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('home') }}">Home</a>
+                    <a href="{{ route('home') }}" class="text-decoration-none">Home</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">
-                    Contatti
-                </li>
+                <li class="breadcrumb-item active" aria-current="page">Contatti</li>
             </ol>
         </nav>
     </div>
-@endsection --}}
+</div>
+@endsection
 
 @section('body')
 <div class="container py-4">

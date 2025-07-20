@@ -2,6 +2,24 @@
 
 @section('title', 'AE - Candidatura')
 
+@section('breadcrumb')
+<div class="bg-light py-2">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('home') }}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('project.index') }}" class="text-decoration-none">Progetti Disponibili</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Candidatura</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+@endsection
+
 @section('body')
 <div class="container py-5">
     <div class="row justify-content-center">

@@ -5,14 +5,25 @@
 @section('active_progetti', 'active')
 
 @section('breadcrumb')
-<div class="container d-flex justify-content-start pt-4">
-    <nav aria-label="breadcrumb" class="w-100">
-        <ol class="breadcrumb bg-light bg-opacity-75 p-3 rounded-4 mb-4 align-items-center">
-            <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('project.index') }}" class="text-decoration-none">Progetti</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('project.edit', $project->id) }}" class="text-decoration-none">Modifica Progetto</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Conferma Completamento</li>
-        </ol>
+<div class="bg-light py-2">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('home') }}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('project.index') }}" class="text-decoration-none">Progetti Disponibili</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('project.show', $project) }}" class="text-decoration-none">{{ $project->title }}</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Conferma Completamento</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+@endsection
     </nav>
 </div>
 @endsection

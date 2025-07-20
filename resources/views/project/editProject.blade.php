@@ -10,6 +10,31 @@
 
 @section('active_progetti', 'active')
 
+@section('breadcrumb')
+<div class="bg-light py-2">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('home') }}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('project.index') }}" class="text-decoration-none">Progetti Disponibili</a>
+                </li>
+                @if (isset($project))
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('project.show', $project) }}" class="text-decoration-none">{{ $project->title }}</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Modifica Progetto</li>
+                @else
+                    <li class="breadcrumb-item active" aria-current="page">Nuovo Progetto</li>
+                @endif
+            </ol>
+        </nav>
+    </div>
+</div>
+@endsection
+
 @section('body')
     <div class="container-fluid px-3 px-md-4 py-4">
         <div class="row justify-content-center">

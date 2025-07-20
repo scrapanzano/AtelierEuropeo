@@ -2,23 +2,35 @@
 
 @section('page_title', 'Gestione Candidature - ' . $project->title)
 
+@section('breadcrumb')
+<div class="bg-light py-2">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('home') }}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('project.index') }}" class="text-decoration-none">Progetti Disponibili</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('project.show', $project) }}" class="text-decoration-none">{{ $project->title }}</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Candidature</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+@endsection
+
 @section('body')
 <div class="container mt-4">
     <!-- Header -->
     <div class="row mb-4">
         <div class="col-md-12">
             <h1 class="h3 mb-0 text-gray-800">
-                <i class="bi bi-person-lines-fill me-2"></i>
                 Gestione Candidature
             </h1>
-            <nav aria-label="breadcrumb" class="mt-2">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('project.index') }}">Progetti Disponibili</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('project.show', $project) }}">{{ $project->title }}</a></li>
-                    <li class="breadcrumb-item active">Candidature</li>
-                </ol>
-            </nav>
         </div>
     </div>
 

@@ -5,29 +5,21 @@
 @section('active_progetti', 'active')
 
 @section('breadcrumb')
-    <div class="container d-flex justify-content-start pt-4">
-        <nav aria-label="breadcrumb" class="w-100">
-            <ol class="breadcrumb bg-light bg-opacity-75 p-3 rounded-4 mb-4 align-items-center">
-                @php
-                    $projectCategory = [
-                        'ESC' => 'Corpo Europeo di Solidarietà',
-                        'YTH' => 'Scambi Giovanili',
-                        'TRG' => 'Corsi di Formazione',
-                    ];
-
-                    $category = $project->category;
-                    $breadcrumbCategory = $projectCategory[$category->tag];
-                @endphp
-                <li class="breadcrumb-item" aria-current="page"><a href="{{ route('home') }}">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('project.index') }}">Progetti
-                        Disponibili</a>
+<div class="bg-light py-2">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('home') }}" class="text-decoration-none">Home</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><a href="{{ route('project.index') }}">
-                        {{ $breadcrumbCategory }}</a></li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('project.index') }}" class="text-decoration-none">Progetti Disponibili</a>
+                </li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $project->title }}</li>
             </ol>
         </nav>
     </div>
+</div>
 @endsection
 
 @section('body')
@@ -57,7 +49,7 @@
             </div>
         @endif
 
-        <div class="hero-section d-flex align-items-center justify-content-center mb-4 px-2"
+        <div class="hero-section d-flex align-items-center justify-content-center mt-4 px-2"
             style="background-image: url('{{ $project->image_url }}'); min-height: 220px;">
             <div class="hero-overlay"></div>
             <div class="container position-relative text-center text-white py-4 py-md-5">
