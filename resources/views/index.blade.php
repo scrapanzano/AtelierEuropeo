@@ -68,8 +68,67 @@
     <!-- Attività -->
     <section class="bg-light">
         <div class="container py-5">
-            <h1 class="section-title">Scopri.<br>Partecipa.</h1>
-            <h1 class="section-subtitle ">Vivi nuove esperienze ed entra nel cuore dell'Europa.</h1>
+            <div class="text-center mb-5">
+                <h1 class="section-title">Scopri.<br>Partecipa.</h1>
+                <h1 class="section-subtitle">Vivi nuove esperienze ed entra nel cuore dell'Europa.</h1>
+            </div>
+            
+            <!-- CTA Cards responsive -->
+            <div class="row g-4">
+                <!-- Corpo Europeo di Solidarietà -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 text-center">
+                        <div class="card-body d-flex flex-column p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-heart-fill text-success" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Corpo Europeo di Solidarietà</h5>
+                            <p class="card-text flex-grow-1 mb-4">
+                                Dedica fino a 12 mesi al volontariato in Europa. Aiuta le comunità, sviluppa competenze e vivi un'esperienza che cambierà la tua vita.
+                            </p>
+                            <a href="{{ route('corpo-europeo') }}" class="btn btn-success btn-rounded px-4">
+                                <i class="bi bi-arrow-right me-2"></i>Scopri di più
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Scambi Giovanili -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 text-center">
+                        <div class="card-body d-flex flex-column p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-people-fill text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Scambi Giovanili</h5>
+                            <p class="card-text flex-grow-1 mb-4">
+                                Partecipa a progetti internazionali con giovani da tutta Europa. Condividi culture, crea legami e scopri nuove prospettive.
+                            </p>
+                            <a href="{{ route('scambi-giovanili') }}" class="btn btn-primary btn-rounded px-4">
+                                <i class="bi bi-arrow-right me-2"></i>Scopri di più
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Corsi di Formazione -->
+                <div class="col-12 col-md-12 col-lg-4">
+                    <div class="card border-0 shadow-sm h-100 text-center">
+                        <div class="card-body d-flex flex-column p-4">
+                            <div class="mb-3">
+                                <i class="bi bi-mortarboard-fill text-warning" style="font-size: 3rem;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">Corsi di Formazione</h5>
+                            <p class="card-text flex-grow-1 mb-4">
+                                Acquisisci nuove competenze attraverso corsi specializzati. Formazione professionale e personale per il tuo futuro in Europa.
+                            </p>
+                            <a href="{{ route('corsi-formazione') }}" class="btn btn-warning btn-rounded px-4">
+                                <i class="bi bi-arrow-right me-2"></i>Scopri di più
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -128,24 +187,68 @@
             
 
             @if($randomTestimonials && $randomTestimonials->count() > 0)
-                <div class="row g-4 mb-5">
-                    @foreach($randomTestimonials as $testimonial)
-                        <div class="col-12 col-lg-4">
-                            <div class="card border-0 h-100" style="background-color: transparent !important;">
-                                <a href="{{ route('project.show', ['project' => $testimonial->project->id]) }}" class="stretched-link"></a>
-                                <div class="card-header border-0 text-center" style="background-color: transparent !important;">
-                                    <i class="bi bi-quote" style="font-size: 1.4rem;"></i>
-                                </div>
-                                <div class="card-body border-0 text-center p-4">
-                                    <p class="lead fw-bold mb-3">{{ $testimonial->content }}</p>
-                                </div>
-                                <div class="card-footer border-0 text-center pt-3" style="background-color: transparent !important;">
+                <!-- Griglia per schermi grandi (lg e superiori) -->
+                <div class="d-none d-lg-block">
+                    <div class="row g-4 mb-5">
+                        @foreach($randomTestimonials as $testimonial)
+                            <div class="col-12 col-lg-4">
+                                <div class="card border-0 h-100" style="background-color: transparent !important;">
+                                    <a href="{{ route('project.show', ['project' => $testimonial->project->id]) }}" class="stretched-link"></a>
+                                    <div class="card-header border-0 text-center" style="background-color: transparent !important;">
+                                        <i class="bi bi-quote" style="font-size: 1.4rem;"></i>
+                                    </div>
+                                    <div class="card-body border-0 text-center p-4">
+                                        <p class="lead fw-bold mb-3">{{ $testimonial->content }}</p>
+                                    </div>
+                                    <div class="card-footer border-0 text-center pt-3" style="background-color: transparent !important;">
                                         <h6 class="fw-bold mb-1">{{ $testimonial->author->name }}</h6>
                                         <small class="opacity-75">{{ $testimonial->project->title }}</small>
+                                    </div>
                                 </div>
                             </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Carosello per schermi piccoli (md e inferiori) -->
+                <div class="d-lg-none mb-5" style="height: 450px;">
+                    <div id="testimonialsCarousel" class="carousel carousel-dark slide slide h-100" data-bs-ride="carousel">
+                        <!-- Indicatori sopra il carosello -->
+                        @if($randomTestimonials->count() > 1)
+                            <div class="carousel-indicators">
+                                @foreach($randomTestimonials as $index => $testimonial)
+                                    <button type="button" data-bs-target="#testimonialsCarousel" data-bs-slide-to="{{ $index }}" 
+                                            class="{{ $index === 0 ? 'active' : '' }}" 
+                                            aria-current="{{ $index === 0 ? 'true' : 'false' }}" 
+                                            aria-label="Testimonianza {{ $index + 1 }}"></button>
+                                @endforeach
+                            </div>
+                        @endif
+                        
+                        <div class="carousel-inner h-100">
+                            @foreach($randomTestimonials as $index => $testimonial)
+                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }} h-100">
+                                    <div class="d-flex justify-content-center align-items-center h-100">
+                                        <div class="col-10 col-md-8">
+                                            <div class="card border-0 h-100 d-flex flex-column" style="background-color: transparent !important;">
+                                                <a href="{{ route('project.show', ['project' => $testimonial->project->id]) }}" class="stretched-link"></a>
+                                                <div class="card-header border-0 text-center flex-shrink-0" style="background-color: transparent !important;">
+                                                    <i class="bi bi-quote" style="font-size: 1.4rem;"></i>
+                                                </div>
+                                                <div class="card-body border-0 text-center p-4 d-flex flex-column justify-content-center flex-grow-1">
+                                                    <p class="lead fw-bold mb-3">{{ $testimonial->content }}</p>
+                                                </div>
+                                                <div class="card-footer border-0 text-center pt-3 flex-shrink-0" style="background-color: transparent !important;">
+                                                    <h6 class="fw-bold mb-1">{{ $testimonial->author->name }}</h6>
+                                                    <small class="opacity-75">{{ $testimonial->project->title }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
+                    </div>
                 </div>
             @endif
 
@@ -156,14 +259,6 @@
                     <i class="bi bi-chat-quote me-2"></i>Leggi tutte le testimonianze
                 </a>
             </div>
-        </div>
-    </section>
-
-    <!-- Partner -->
-    <section>
-        <div class="container py-5 text-center">
-            <h1 class="section-title">I nostri partner</h1>
-            <h1 class="section-subtitle">Collaboriamo per creare opportunità europee.</h1>
         </div>
     </section>
 @endsection

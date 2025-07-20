@@ -41,7 +41,7 @@
     bottom: 0;
     left: 0;
     margin: 0.5rem;
-    background: rgba(33, 37, 41, 0.75); 
+    background: rgba(33, 37, 41, 0.75);
     border-radius: 0.5rem;
     font-weight: 500;
     z-index: 2;
@@ -75,9 +75,11 @@
     .section-title {
         font-size: 3.5rem;
     }
+
     .section-subtitle {
         font-size: 1.2rem;
     }
+
     .main-text {
         font-size: 1.1rem;
     }
@@ -87,12 +89,24 @@
     .section-title {
         font-size: 2.2rem;
     }
+
     .section-subtitle {
         font-size: 1rem;
     }
+
     .main-text {
         font-size: 1rem;
     }
+}
+
+footer .nav-link {
+    color: rgba(255, 255, 255, 0.5) !important;
+    transition: color 0.15s ease-in-out;
+}
+
+footer .nav-link:hover,
+footer .nav-link:focus {
+    color: white !important;
 }
 
 .bg-europe {
