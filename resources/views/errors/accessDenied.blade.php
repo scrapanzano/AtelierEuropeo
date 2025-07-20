@@ -1,31 +1,84 @@
 @extends('layouts.master')
 
+@section('title', 'AE - Accesso Negato')
+
 @section('breadcrumb')
-    <div class="container d-flex justify-content-start pt-4">
-        <nav aria-label="breadcrumb" class="w-100">
-            <ol class="breadcrumb bg-light bg-opacity-75 p-3 rounded-4 mb-4 align-items-center">
-                <li class="breadcrumb-item" aria-current="page"><a href="{{ route('home') }}">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Access denied</li>
+<div class="bg-light py-2">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('home') }}" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Accesso Negato</li>
             </ol>
         </nav>
     </div>
+</div>
 @endsection
 
 @section('body')
-    <div class="container text-center">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card border-danger">
-                    <div class='card-header'>
-                        <b>Illegal page access:</b> something <strong>wrong</strong> happened while accessing this page!
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-6">
+            <div class="text-center mb-4">
+                <div class="display-1 text-danger mb-3">
+                    <i class="bi bi-shield-x"></i>
+                </div>
+                <h1 class="h2 text-dark mb-3">Accesso Negato</h1>
+                <p class="lead text-muted mb-4">
+                    Non hai i permessi necessari per accedere a questa pagina.
+                </p>
+                
+                @if(isset($message))
+                    <div class="alert alert-warning" role="alert">
+                        {{ $message }}
                     </div>
-                    <div class='card-body'>
-                        <p>{{ $message }}</p>
-                        <p><a class="btn btn-danger" href="{{ route('home') }}"><i class="bi bi-box-arrow-left"></i> Back to
-                                home!</a></p>
-                    </div>
+                @endif
+                
+                <p class="text-muted mb-4">
+                    Se pensi che questo sia un errore, contatta l'amministratore del sito.
+                </p>
+                
+                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                    <a href="{{ route('home') }}" class="btn btn-warning btn-lg">
+                        Torna alla Home
+                    </a>
+                    @guest
+                        <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg">
+                            Accedi
+                        </a>
+                    @endguest
+                </div>
+            </div>
+            
+            <!-- Informazioni utili -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-primary mb-3">Cosa puoi fare:</h5>
+                    <ul class="list-unstyled mb-0">
+                        @guest
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Effettua il login se hai un account
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                Registrati se non hai ancora un account
+                            </li>
+                        @endguest
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            Verifica di avere i permessi necessari
+                        </li>
+                        <li class="mb-0">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            <a href="{{ route('contact') }}" class="text-decoration-none">Contatta il supporto</a> se il problema persiste
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection
