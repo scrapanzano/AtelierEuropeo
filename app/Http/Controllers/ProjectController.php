@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DataLayer;
 use App\Http\Requests\ProjectRequest;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -349,7 +350,7 @@ class ProjectController extends Controller
         $title = $request->input('title');
         $projectId = $request->input('project_id'); // Per escludere il progetto corrente in modifica
         
-        $query = \App\Models\Project::where('title', $title);
+        $query = Project::where('title', $title);
         
         // Se stiamo modificando un progetto, escludi quello corrente
         if ($projectId) {
