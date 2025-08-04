@@ -9,7 +9,7 @@
     <section style="background-color: #1a2442">
         <div class="container py-5 text-center">
             <h1 class="section-title text-warning">Atelier Europeo</h1>
-            <h1 class="section-subtitle text-white" style="opacity: 1;">Opportunità per crescere, viaggiare e imparare.</h1>
+            <h1 class="section-subtitle text-white">Opportunità per crescere, viaggiare e imparare.</h1>
         </div>
     </section>
 
