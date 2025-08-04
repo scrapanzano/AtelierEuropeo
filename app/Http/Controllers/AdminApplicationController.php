@@ -67,16 +67,16 @@ class AdminApplicationController extends Controller
             'admin_message' => 'nullable|string|max:1000'
         ]);
 
-        // Se si sta tentando di approvare, controlla il limite
-        if ($request->status === 'approved') {
-            $project = $application->project;
-            $approvedApplicationsCount = Application::where('project_id', $project->id)
-                ->where('status', 'approved')
-                ->count();
+        $project = $application->project;
 
-            if ($approvedApplicationsCount >= $project->requested_people) {
-                return redirect()->back()->with('error', 
-                    "Non è possibile approvare questa candidatura. Il progetto ha già raggiunto il numero massimo di partecipanti richiesti ({$project->requested_people}).");
+        // Controllo limite per approvazione
+        if ($request->status === 'approved') {
+            $approvalCheck = $project->checkApprovalLimit();
+            
+            if (!$approvalCheck['can_approve']) {
+                return redirect()->back()
+                    ->withErrors(['approval_limit' => $approvalCheck['status_message']])
+                    ->with('project_status', $approvalCheck);
             }
         }
 
@@ -93,8 +93,18 @@ class AdminApplicationController extends Controller
             'pending' => 'rimessa in attesa'
         ];
 
-        return redirect()->back()->with('success', 
-            'Candidatura ' . $statusText[$request->status] . ' con successo!');
+        // Messaggio di successo con info sul progetto per le approvazioni
+        $successMessage = 'Candidatura ' . $statusText[$request->status] . ' con successo!';
+        if ($request->status === 'approved') {
+            $updatedCheck = $project->checkApprovalLimit();
+            $successMessage .= ' ' . $updatedCheck['status_message'];
+            
+            return redirect()->back()
+                ->with('success', $successMessage)
+                ->with('project_status', $updatedCheck);
+        }
+
+        return redirect()->back()->with('success', $successMessage);
     }
 
     /**
@@ -111,15 +121,13 @@ class AdminApplicationController extends Controller
             'admin_message' => 'nullable|string|max:1000'
         ]);
 
-        // Controlla se ci sono già abbastanza candidature approvate
         $project = $application->project;
-        $approvedApplicationsCount = Application::where('project_id', $project->id)
-            ->where('status', 'approved')
-            ->count();
-
-        if ($approvedApplicationsCount >= $project->requested_people) {
-            return redirect()->back()->with('error', 
-                "Non è possibile approvare questa candidatura. Il progetto ha già raggiunto il numero massimo di partecipanti richiesti ({$project->requested_people}).");
+        $approvalCheck = $project->checkApprovalLimit();
+        
+        if (!$approvalCheck['can_approve']) {
+            return redirect()->back()
+                ->withErrors(['approval_limit' => $approvalCheck['status_message']])
+                ->with('project_status', $approvalCheck);
         }
 
         $application->update([
@@ -129,7 +137,12 @@ class AdminApplicationController extends Controller
             'updated_by_admin_id' => Auth::id(),
         ]);
 
-        return redirect()->back()->with('success', 'Candidatura approvata con successo!');
+        $updatedCheck = $project->checkApprovalLimit();
+        $successMessage = 'Candidatura approvata con successo! ' . $updatedCheck['status_message'];
+
+        return redirect()->back()
+            ->with('success', $successMessage)
+            ->with('project_status', $updatedCheck);
     }
 
     /**

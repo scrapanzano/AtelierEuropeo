@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class FrontController extends Controller
 {
+    public function chiara() {
+        return view('chiara.index');
+    }
+    
     public function getHome() {
         
         $dl = new DataLayer();

@@ -88,4 +88,38 @@ class Project extends Model
         return $this->belongsToMany(User::class, 'user_favorites', 'project_id', 'user_id')
                     ->withTimestamps();
     }
+
+    /**
+     * Verifica se il progetto può accettare altre candidature approvate
+     * Restituisce un array con informazioni dettagliate per l'admin
+     */
+    public function checkApprovalLimit()
+    {
+        $approvedCount = $this->application()->where('status', 'approved')->count();
+        $canApprove = $approvedCount < $this->requested_people;
+        $remaining = max(0, $this->requested_people - $approvedCount);
+        
+        return [
+            'can_approve' => $canApprove,
+            'approved_count' => $approvedCount,
+            'requested_people' => $this->requested_people,
+            'remaining_slots' => $remaining,
+            'is_full' => !$canApprove,
+            'status_message' => $this->getApprovalStatusMessage($approvedCount, $remaining)
+        ];
+    }
+
+    /**
+     * Genera un messaggio di stato chiaro per l'admin
+     */
+    private function getApprovalStatusMessage($approved, $remaining)
+    {
+        if ($remaining === 0) {
+            return "⚠️ LIMITE RAGGIUNTO: {$approved}/{$this->requested_people} candidature approvate";
+        } elseif ($remaining <= 2) {
+            return "🔶 ATTENZIONE: Solo {$remaining} posto/i rimasto/i ({$approved}/{$this->requested_people})";
+        } else {
+            return "✅ Disponibili: {$remaining} posti rimasti ({$approved}/{$this->requested_people})";
+        }
+    }
 }

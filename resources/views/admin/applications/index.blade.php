@@ -83,6 +83,23 @@
         </div>
     @endif
 
+    @if($errors->has('approval_limit'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Limite Candidature:</strong> {{ $errors->first('approval_limit') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('project_status'))
+        @php $status = session('project_status'); @endphp
+        <div class="alert alert-{{ $status['is_full'] ? 'danger' : ($status['remaining_slots'] <= 2 ? 'warning' : 'info') }} alert-dismissible fade show" role="alert">
+            <i class="bi bi-{{ $status['is_full'] ? 'x-circle' : ($status['remaining_slots'] <= 2 ? 'exclamation-triangle' : 'info-circle') }} me-2"></i>
+            <strong>Stato Progetto:</strong> {{ $status['status_message'] }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <!-- Statistiche -->
     <div class="row mb-4">
         <div class="col-md-3">
@@ -148,45 +165,29 @@
     </div>
 
     <!-- Avviso limite partecipanti -->
-    @if($stats['approved'] >= $project->requested_people)
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="alert alert-warning border-left-warning" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
-                        <div>
-                            <h6 class="alert-heading mb-1">
-                                <strong>Limite partecipanti raggiunto!</strong>
-                            </h6>
-                            <p class="mb-0">
-                                Il progetto ha raggiunto il numero massimo di partecipanti richiesti 
-                                (<strong>{{ $stats['approved'] }}/{{ $project->requested_people }}</strong>). 
+    @php $projectStatus = $project->checkApprovalLimit(); @endphp
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="alert alert-{{ $projectStatus['is_full'] ? 'warning' : ($projectStatus['remaining_slots'] <= 2 ? 'warning' : 'info') }} border-left-{{ $projectStatus['is_full'] ? 'warning' : ($projectStatus['remaining_slots'] <= 2 ? 'warning' : 'info') }}" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-{{ $projectStatus['is_full'] ? 'exclamation-triangle-fill' : ($projectStatus['remaining_slots'] <= 2 ? 'exclamation-triangle-fill' : 'info-circle-fill') }} me-3 fs-4"></i>
+                    <div>
+                        <h6 class="alert-heading mb-1">
+                            <strong>Stato Candidature:</strong>
+                        </h6>
+                        <p class="mb-0">
+                            {{ $projectStatus['status_message'] }}
+                        </p>
+                        @if($projectStatus['is_full'])
+                            <small class="text-muted mt-1 d-block">
                                 Non sarà possibile approvare ulteriori candidature.
-                            </p>
-                        </div>
+                            </small>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
-    @elseif($stats['approved'] > 0)
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="alert alert-info border-left-info" role="alert">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-info-circle-fill me-3 fs-4"></i>
-                        <div>
-                            <p class="mb-0">
-                                <strong>Partecipanti approvati:</strong> {{ $stats['approved'] }}/{{ $project->requested_people }}
-                                @if($project->requested_people - $stats['approved'] > 0)
-                                    - Rimangono <strong>{{ $project->requested_people - $stats['approved'] }}</strong> posti disponibili.
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    </div>
 
     <!-- Lista Candidature -->
     <div class="row mb-4">

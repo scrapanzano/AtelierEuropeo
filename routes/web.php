@@ -48,6 +48,8 @@ Route::get('/language-test', function () {
 |--------------------------------------------------------------------------
 */
 
+Route::get('/chiara', [FrontController::class, 'chiara'])->name('chiara');
+
 // Homepage
 Route::get('/', [FrontController::class, 'getHome'])->name('home');
 

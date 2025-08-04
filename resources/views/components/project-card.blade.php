@@ -159,20 +159,34 @@
                         @endphp
                         <span class="{{ $status['class'] }} fw-semibold">{{ $status['text'] }}</span>
                     </div>
-                    <div class="col-6">
-                        <strong>Candidature:</strong> {{ $project->application->count() }}
-                    </div>
-                    <div class="col-6">
-                        <strong>Approvate:</strong> 
+                    <div class="col-12 mb-1">
                         @php
-                            $approvedCount = $project->application->where('status', 'approved')->count();
+                            $approvalStatus = $project->checkApprovalLimit();
+                            $totalApplications = $project->application->count();
+                            $pendingCount = $project->application->where('status', 'pending')->count();
+                            $rejectedCount = $project->application->where('status', 'rejected')->count();
                         @endphp
-                        <span class="{{ $approvedCount >= $project->requested_people ? 'text-warning fw-bold' : 'text-muted' }}">
-                            {{ $approvedCount }}/{{ $project->requested_people }}
-                        </span>
-                        @if($approvedCount >= $project->requested_people)
-                            <i class="bi bi-exclamation-triangle text-warning ms-1" title="Limite raggiunto"></i>
+                        <strong>Candidature Ricevute:</strong> 
+                        <span class="text-muted">{{ $totalApplications }}</span>
+                        @if($totalApplications > 0)
+                            <small class="text-muted">
+                                ({{ $pendingCount }} in attesa, {{ $rejectedCount }} rifiutate)
+                            </small>
                         @endif
+                    </div>
+                    <div class="col-12">
+                        <strong>Posti Disponibili:</strong>
+                        <span class="{{ $approvalStatus['is_full'] ? 'text-danger fw-bold' : ($approvalStatus['remaining_slots'] <= 2 ? 'text-warning fw-bold' : 'text-success') }}">
+                            {{ $approvalStatus['approved_count'] }}/{{ $approvalStatus['requested_people'] }} occupati
+                        </span>
+                        @if($approvalStatus['is_full'])
+                            <i class="bi bi-x-circle-fill text-danger ms-1" title="Tutti i posti occupati"></i>
+                        @elseif($approvalStatus['remaining_slots'] <= 2)
+                            <i class="bi bi-exclamation-triangle-fill text-warning ms-1" title="Pochi posti rimasti"></i>
+                        @else
+                            <i class="bi bi-check-circle text-success ms-1" title="Posti disponibili"></i>
+                        @endif
+                        <br>    
                     </div>
                     <div class="col-6">
                         <strong>Scadenza:</strong>
@@ -186,12 +200,9 @@
                             @if (!$isExpired && $daysToExpire <= 7)
                                 ({{ $daysToExpire }} giorni)
                             @elseif ($isExpired)
-                                (Scaduto)
+                                (Scaduto)   
                             @endif
                         </span>
-                    </div>
-                    <div class="col-6">
-                        <strong>Associazione:</strong> {{ $project->association->name ?? 'N/D' }}
                     </div>
                 </div>
             </div>

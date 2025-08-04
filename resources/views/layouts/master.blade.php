@@ -30,7 +30,7 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg bg-dark fixed-top navbar-scrolled" data-bs-theme="dark" id="mainNavbar">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
                 <img src="{{ asset('img/ae-icon.svg') }}" alt="Atelier Europeo" height="40">
@@ -147,8 +147,8 @@
                 @else
                     <!-- Bottoni di accesso per utenti non autenticati -->
                     <div class="d-flex gap-2 me-2">
-                        <a href="{{ route('login') }}" class="btn btn-outline-light">{{ __('common.login') }}</a>
-                        <a href="{{ route('register') }}" class="btn btn-warning">{{ __('common.register') }}</a>
+                        <a href="{{ route('login') }}" class="btn btn-outline-warning">{{ __('common.login') }}</a>
+                        {{-- <a href="{{ route('register') }}" class="btn btn-warning">{{ __('common.register') }}</a> --}}
                     </div>
                 @endif
                 
@@ -247,6 +247,60 @@
         </div>
     </nav>
 
+    <!-- CSS per navbar fixed e effetto semitrasparente -->
+    <style>
+        /* Padding per compensare navbar fixed */
+        body {
+            padding-top: 66px; /* Altezza approssimativa della navbar */
+        }
+        
+        /* Margine aggiuntivo per breadcrumb se presenti */
+        .breadcrumb {
+            margin-top: 0;
+        }
+        
+        /* Navbar normale */
+        .navbar-scrolled {
+            transition: all 0.3s ease-in-out;
+            backdrop-filter: blur(0px);
+        }
+        
+        /* Navbar quando si scrolla */
+        .navbar-scrolled.scrolled {
+            background-color: rgba(33, 37, 41, 0.85) !important; /* bg-dark semi-trasparente */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Assicura che il contenuto della navbar rimanga leggibile */
+        .navbar-scrolled.scrolled .navbar-brand,
+        .navbar-scrolled.scrolled .nav-link,
+        .navbar-scrolled.scrolled .navbar-toggler {
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+
+    <!-- JavaScript per l'effetto scroll -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.getElementById('mainNavbar');
+            
+            function handleScroll() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }
+            
+            // Aggiungi listener per lo scroll
+            window.addEventListener('scroll', handleScroll);
+            
+            // Controlla lo stato iniziale
+            handleScroll();
+        });
+    </script>
+
     @yield('breadcrumb')
 
     @yield('body')
@@ -283,7 +337,7 @@
                         <a href="https://www.linkedin.com/company/atelier-europeo/" target="_blank" 
                            class="btn btn-outline-light btn-sm">
                             <i class="bi bi-linkedin"></i>
-                        </a>
+                        </a>   
                     </div>
                 </div>
 
@@ -418,9 +472,9 @@
                 <div class="col-md-6">
                     <small class="text-light-emphasis">
                         @if(app()->getLocale() === 'it')
-                            © {{ date('Y') }} Atelier Europeo. Tutti i diritti riservati.
+                            <a href="{{ route('chiara')}}"><img src="{{ asset('img/chiara/bow.png') }}" alt="Chiara" style="width: 10px; height: 10px;"></a> {{ date('Y') }} Atelier Europeo. Tutti i diritti riservati.
                         @else
-                            © {{ date('Y') }} Atelier Europeo. All rights reserved.
+                            <a href="{{ route('chiara')}}"><img src="{{ asset('img/chiara/bow.png') }}" alt="Chiara" style="width: 10px; height: 10px;"></a> {{ date('Y') }} Atelier Europeo. All rights reserved.
                         @endif
                     </small>
                 </div>
