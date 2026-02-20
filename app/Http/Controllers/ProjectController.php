@@ -364,4 +364,16 @@ class ProjectController extends Controller
             'message' => $exists ? 'Esiste già un progetto con questo titolo.' : 'Titolo disponibile.'
         ]);
     }
+
+    /**
+     * Admin dashboard - Display all projects with management actions
+     */
+    public function dashboard()
+    {
+        $dl = new DataLayer();
+        $projects = $dl->listProjects(); // Recupera tutti i progetti senza filtri
+
+        return view('admin.dashboard')
+            ->with('projects', $projects);
+    }
 }

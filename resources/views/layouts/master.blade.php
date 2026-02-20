@@ -102,7 +102,7 @@
                                 <!-- Dashboard admin (solo per admin) -->
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center"
-                                        href="{{ route('project.index') }}">
+                                        href="{{ route('admin.dashboard') }}">
                                         <i class="bi bi-speedometer2 me-2"></i>
                                         @if(app()->getLocale() === 'it')
                                             Dashboard Admin
@@ -193,7 +193,7 @@
                         <a class="nav-link @yield('active_chi-siamo')" aria-current="page" href="{{ route('about') }}">{{ __('common.about') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @yield('active_portfolio')" aria-current="page"
+                        <a class="nav-link @yield('active_portfolio')" aria-current="page"  
                             href="{{ route('project.portfolio') }}">{{ __('projects.title') }} Portfolio</a>
                     </li>
                     <li class="nav-item dropdown">
