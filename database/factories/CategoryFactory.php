@@ -9,16 +9,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CategoryFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    private const CATEGORIE = [
+        ['name' => 'European Solidarity Corps', 'tag' => 'ESC'],
+        ['name' => 'Youth',                     'tag' => 'YTH'],
+        ['name' => 'Training',                  'tag' => 'TRG'],
+    ];
+
     public function definition(): array
     {
-        return [
-            'name' => $this->randomElement(['European Solidarity Corps', 'Youth Exchange', 'Training Course']),
-            'tag' => $this->faker->randomElement(['ESC', 'YTH', 'TRG']),
-        ];
+        return $this->faker->randomElement(self::CATEGORIE);
     }
 }

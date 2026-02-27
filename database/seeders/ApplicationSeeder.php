@@ -5,78 +5,66 @@ namespace Database\Seeders;
 use App\Models\Application;
 use App\Models\User;
 use App\Models\Project;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ApplicationSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $registeredUsers = User::where('role', 'registered_user')->get();
-        $projects = Project::all();
-        
+        $projects        = Project::all();
+
         if ($registeredUsers->isEmpty() || $projects->isEmpty()) {
-            $this->command->warn('No users or projects found. Make sure UserSeeder and ProjectSeeder run first.');
+            $this->command->warn('Nessun utente o progetto trovato. Eseguire prima UserSeeder e ProjectSeeder.');
             return;
         }
-        
-        $existingCombinations = collect();
-        
-        // Funzione helper per evitare duplicati
-        $createUniqueApplication = function($factory, $maxAttempts = 10) use (&$existingCombinations, $registeredUsers, $projects) {
-            for ($i = 0; $i < $maxAttempts; $i++) {
-                $userId = $registeredUsers->random()->id;
+
+        $existing = collect();
+
+        $createUnique = function ($factory, int $maxTries = 12) use (&$existing, $registeredUsers, $projects) {
+            for ($i = 0; $i < $maxTries; $i++) {
+                $userId  = $registeredUsers->random()->id;
                 $project = $projects->random();
-                $combination = "{$userId}_{$project->id}";
-                
-                if (!$existingCombinations->contains($combination)) {
-                    $existingCombinations->push($combination);
+                $key     = "{$userId}_{$project->id}";
+
+                if (!$existing->contains($key)) {
+                    $existing->push($key);
                     return $factory->forProject($project)->create(['user_id' => $userId]);
                 }
             }
-            // Se non riusciamo a trovare una combinazione unica, saltiamo
             return null;
         };
-        
-        // Assicuriamoci che ogni utente abbia almeno una candidatura
-        foreach ($registeredUsers->take(10) as $user) {
-            $randomProject = $projects->random();
-            $combination = "{$user->id}_{$randomProject->id}";
-            
-            if (!$existingCombinations->contains($combination)) {
-                $existingCombinations->push($combination);
-                Application::factory()
-                    ->forProject($randomProject)
-                    ->create(['user_id' => $user->id]);
+
+        // Ogni utente ha almeno una candidatura
+        foreach ($registeredUsers as $user) {
+            $project = $projects->random();
+            $key     = "{$user->id}_{$project->id}";
+            if (!$existing->contains($key)) {
+                $existing->push($key);
+                Application::factory()->forProject($project)->create(['user_id' => $user->id]);
             }
         }
-        
-        // Candidature approvate (20)
-        foreach (range(1, 20) as $i) {
-            $createUniqueApplication(Application::factory()->approved());
+
+        // Candidature approvate
+        foreach (range(1, 25) as $_) {
+            $createUnique(Application::factory()->approved());
         }
-            
-        // Candidature rifiutate (15) 
-        foreach (range(1, 15) as $i) {
-            $createUniqueApplication(Application::factory()->rejected());
+        // Candidature rifiutate
+        foreach (range(1, 20) as $_) {
+            $createUnique(Application::factory()->rejected());
         }
-            
-        // Candidature in attesa (25)
-        foreach (range(1, 25) as $i) {
-            $createUniqueApplication(Application::factory()->pending());
+        // Candidature in attesa
+        foreach (range(1, 30) as $_) {
+            $createUnique(Application::factory()->pending());
         }
-            
-        // Alcune candidature casuali aggiuntive
-        foreach (range(1, 30) as $i) {
-            $createUniqueApplication(Application::factory());
+        // Candidature casuali aggiuntive
+        foreach (range(1, 25) as $_) {
+            $createUnique(Application::factory());
         }
-            
-        $this->command->info('Created ' . Application::count() . ' applications total');
-        $this->command->info('- Approved: ' . Application::where('status', 'approved')->count());
-        $this->command->info('- Rejected: ' . Application::where('status', 'rejected')->count());
-        $this->command->info('- Pending: ' . Application::where('status', 'pending')->count());
+
+        $this->command->info('Create ' . Application::count() . ' candidature totali');
+        $this->command->info('- Approvate: ' . Application::where('status', 'approved')->count());
+        $this->command->info('- Rifiutate: ' . Application::where('status', 'rejected')->count());
+        $this->command->info('- In attesa: ' . Application::where('status', 'pending')->count());
     }
 }

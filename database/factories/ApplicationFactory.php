@@ -29,7 +29,7 @@ class ApplicationFactory extends Factory
             'status' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
             'user_id' => User::where('role', 'registered_user')->inRandomOrder()->first()?->id ?? User::factory()->create(['role' => 'registered_user'])->id,
             'project_id' => Project::inRandomOrder()->first()?->id ?? Project::factory()->create()->id,
-            'phone' => $this->faker->phoneNumber(),
+            'phone' => '+39 ' . $this->faker->randomElement(['320','328','329','333','338','347','349','366','370','380','388','389','391','392']) . ' ' . $this->faker->numerify('### ####'),
             'document_path' => null, // Per i dati di test non usiamo documenti reali
             'document_name' => $this->faker->randomElement($documentTypes) . '_' . $this->faker->lastName() . '.' . $this->faker->randomElement($documentExtensions),
             'admin_message' => $this->faker->optional(0.3)->sentence(),
