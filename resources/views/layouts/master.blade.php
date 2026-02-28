@@ -27,6 +27,9 @@
 
     <!-- Bootstrap Icons-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Flag Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -156,20 +159,20 @@
                 <div class="dropdown me-3">
                     <button class="btn btn-light dropdown-toggle btn-sm" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         @if(app()->getLocale() === 'it')
-                            🇮🇹 IT
+                            <span class="fi fi-it" style="font-size: 0.8em;"></span> IT
                         @else
-                            🇬🇧 EN
+                            <span class="fi fi-gb" style="font-size: 0.8em;"></span> EN
                         @endif
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
                         <li>
                             <a class="dropdown-item" href="{{ route('lang.switch', 'it') }}">
-                                🇮🇹 {{ __('common.italian') }}
+                                <span class="fi fi-it" style="font-size: 0.8em;"></span> {{ __('common.italian') }}
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="{{ route('lang.switch', 'en') }}">
-                                🇬🇧 {{ __('common.english') }}
+                                <span class="fi fi-gb" style="font-size: 0.8em;"></span> {{ __('common.english') }}
                             </a>
                         </li>
                     </ul>
