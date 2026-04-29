@@ -116,10 +116,10 @@ class TestimonialSeeder extends Seeder
                             $content = str_replace('progetto', 'progetto di Corpo Europeo di Solidarietà', $content);
                             break;
                         case 'YTH':
-                            $content = str_replace('progetto', 'programma giovanile europeo', $content);
+                            $content = str_replace('progetto', 'scambio giovanile europeo', $content);
                             break;
                         case 'TRG':
-                            $content = str_replace('progetto', 'corso di formazione', $content);
+                            $content = str_replace('progetto', 'corso di formazione internazionale', $content);
                             break;
                     }
                 }
