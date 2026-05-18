@@ -35,6 +35,9 @@ Route::get('/lang/{locale}', function ($locale) {
 
 // Homepage
 Route::get('/', [FrontController::class, 'getHome'])->name('home');
+Route::get('/project-image/{path}', [ProjectController::class, 'showImage'])
+    ->where('path', '.*')
+    ->name('project.image');
 
 // Pagine statiche
 Route::get('/about', [FrontController::class, 'getAbout'])->name('about');
