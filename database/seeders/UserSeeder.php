@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
 
         // ---- Utenti registrati fissi (credenziali certe per il testing) ----
         User::factory()->create([
-            'name'     => 'Marco Esposito',
+            'name'     => 'Luca Bonetti',
             'email'    => 'user@atelier.it',
             'password' => Hash::make('password'),
             'role'     => 'registered_user',

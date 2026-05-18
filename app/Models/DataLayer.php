@@ -18,7 +18,8 @@ class DataLayer {
     {
         // Recupera progetti pubblicati in ordine casuale
         return Project::where('status', 'published')
-                    ->inRandomOrder()
+                    ->orderByDesc('created_at')
+                    ->orderByDesc('id')
                     ->limit($limit)
                     ->get();
     }
